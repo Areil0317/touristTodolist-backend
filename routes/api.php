@@ -1,0 +1,112 @@
+<?php
+namespace App\Http\Controllers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\MyCont;
+
+
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "api" middleware group. Make something great!
+|
+*/
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+
+
+Route::post('/add', function (Request $request) {
+    $title = $request->title;
+    $email = $request->email;
+    $uid = DB::select('select uid from users where email = ?' , [$email]);
+    
+    if (!empty($uid)) {
+        $uid = $uid[0]->uid; 
+        DB::insert('insert into touristlist (title,uid) VALUES (?,?)', [$title, $uid]);
+        echo "OK";
+    } else {
+        echo "User not found";
+    }
+});
+
+Route::post('/addcost', function (Request $request) {
+    $title = $request->title;
+    $cost = $request->cost;
+    $tlid = DB::select('select tlid from touristlist where title = ?' , [$title]);
+    
+    if (!empty($tlid)) {
+        $tlid = $tlid[0]->tlid; 
+        DB::insert('insert into listcost (cost,tlid) VALUES (?,?)', [$cost, $tlid]);
+        echo "OK";
+    } else {
+        echo "list not found";
+    }
+});
+
+
+Route::post('/showlist', function (Request $request) {
+
+    $password = $request->password;
+    $email = $request->email;
+
+    $user = DB::select("select cost, listcost.tlid, title, users.id, name, email from touristlist left JOIN users ON touristlist.uid = users.id left JOIN listcost ON touristlist.tlid = listcost.tlid where email = ?", [$email]);
+
+
+    return response($user)->header("Access-Control-Allow-Origin", "*");
+
+
+});
+
+Route::post('/update', function (Request $request) {
+
+    $name = $request->name;
+    $password = $request->password;
+    $email = $request->email;
+
+    DB::update("update users set password = ? where email = ?", [$password, $email]);
+    DB::update("update users set name = ? where email = ?", [$name, $email]);
+
+    echo "更改成功";
+
+});
+
+
+
+
+Route::get('/get', function (Request $request) {
+
+
+    $user = DB::select("select * from users");
+
+
+    return response($user)->header("Access-Control-Allow-Origin", "*");
+
+});
+
+Route::get("/comment", [MyCont::class, "main"]);
+Route::get("/comment/{uid}", [MyCont::class, "show_by_user"]);
+Route::get("/thread-comment/{tid}", [MyCont::class, "show_by_thread"]);
+
+
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('/test', function () {
+    return response()->json(['message' => 'This is a test.']);
+});
