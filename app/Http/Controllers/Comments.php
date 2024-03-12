@@ -11,7 +11,9 @@ class Comments extends Controller
      */
     public function index()
     {
-        //
+        return [
+            "message" => "Hello comment"
+        ];
     }
 
     /**

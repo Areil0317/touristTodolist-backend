@@ -6,7 +6,7 @@ use App\Http\Controllers\AuthController;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\MyCont;
+use App\Http\Controllers\Comments;
 
 
 /*
@@ -95,6 +95,4 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 // Comment APIs
-Route::get("/comment", [MyCont::class, "main"]);
-Route::get("/comment/{uid}", [MyCont::class, "show_by_user"]);
-Route::get("/thread-comment/{tid}", [MyCont::class, "show_by_thread"]);
+Route::resource("/comment", Comments::class);
