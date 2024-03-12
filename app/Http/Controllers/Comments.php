@@ -21,7 +21,9 @@ class Comments extends Controller
      */
     public function create()
     {
-        //
+        return response([
+            "message" => "Not supported"
+        ], 405);
     }
 
     /**
@@ -45,7 +47,9 @@ class Comments extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return response([
+            "message" => "Not supported"
+        ], 405);
     }
 
     /**
@@ -62,5 +66,36 @@ class Comments extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    /**
+     * No ID given.
+     */
+    public function no_id_given() {
+        return response([
+            "message" => "Please provide ID for querying."
+        ], 400);
+    }
+
+    /**
+     * Get the user's comments.
+     */
+    public function show_by_user($uid) {
+        $sql = DB::select("SELECT tid as thread, comment, rate, date FROM `comments` WHERE uid = ? ORDER BY date ASC", [$uid]);
+        return [
+            "uid" => $uid,
+            "result" => $sql
+        ];
+    }
+
+    /**
+     * Get the thread's comments.
+     */
+    public function show_by_thread($tid) {
+        $sql = DB::select("SELECT uid as user, comment, rate, date FROM `comments` WHERE tid = ? ORDER BY date ASC", [$tid]);
+        return [
+            "tid" => $tid,
+            "result" => $sql
+        ];
     }
 }

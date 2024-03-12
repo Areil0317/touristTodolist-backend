@@ -61,16 +61,10 @@ Route::post('/addcost', function (Request $request) {
 });
 
 Route::post('/showlist', function (Request $request) {
-
     $password = $request->password;
     $email = $request->email;
-
     $user = DB::select("select cost, listcost.tlid, title, users.id, name, email from touristlist left JOIN users ON touristlist.uid = users.id left JOIN listcost ON touristlist.tlid = listcost.tlid where email = ?", [$email]);
-
-
     return response($user)->header("Access-Control-Allow-Origin", "*");
-
-
 });
 
 Route::post('/update', function (Request $request) {
@@ -96,3 +90,8 @@ Route::post('/login', [AuthController::class, 'login']);
 
 // Comment APIs
 Route::resource("/comment", Comments::class);
+// Special comment APIs
+Route::get("/user-comment", [Comments::class, "no_id_given"]);
+Route::get("/thread-comment", [Comments::class, "no_id_given"]);
+Route::get("/user-comment/{uid}", [Comments::class, "show_by_user"]);
+Route::get("/thread-comment/{tid}", [Comments::class, "show_by_thread"]);
