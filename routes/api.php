@@ -24,15 +24,21 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/', function() {
+    return response()->json(['message' => 'This is a test.']);
+});
+Route::get('/test', function() {
+    return response()->json(['message' => 'This is a test.']);
+});
 
-
+// Add APIs
 Route::post('/add', function (Request $request) {
     $title = $request->title;
     $email = $request->email;
     $uid = DB::select('select uid from users where email = ?' , [$email]);
-    
+
     if (!empty($uid)) {
-        $uid = $uid[0]->uid; 
+        $uid = $uid[0]->uid;
         DB::insert('insert into touristlist (title,uid) VALUES (?,?)', [$title, $uid]);
         echo "OK";
     } else {
@@ -44,16 +50,15 @@ Route::post('/addcost', function (Request $request) {
     $title = $request->title;
     $cost = $request->cost;
     $tlid = DB::select('select tlid from touristlist where title = ?' , [$title]);
-    
+
     if (!empty($tlid)) {
-        $tlid = $tlid[0]->tlid; 
+        $tlid = $tlid[0]->tlid;
         DB::insert('insert into listcost (cost,tlid) VALUES (?,?)', [$cost, $tlid]);
         echo "OK";
     } else {
         echo "list not found";
     }
 });
-
 
 Route::post('/showlist', function (Request $request) {
 
@@ -81,32 +86,15 @@ Route::post('/update', function (Request $request) {
 
 });
 
-
-
-
+// User APIs
 Route::get('/get', function (Request $request) {
-
-
     $user = DB::select("select * from users");
-
-
     return response($user)->header("Access-Control-Allow-Origin", "*");
-
 });
-
-Route::get("/comment", [MyCont::class, "main"]);
-Route::get("/comment/{uid}", [MyCont::class, "show_by_user"]);
-Route::get("/thread-comment/{tid}", [MyCont::class, "show_by_thread"]);
-
-
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/test', function () {
-    return response()->json(['message' => 'This is a test.']);
-});
+// Comment APIs
+Route::get("/comment", [MyCont::class, "main"]);
+Route::get("/comment/{uid}", [MyCont::class, "show_by_user"]);
+Route::get("/thread-comment/{tid}", [MyCont::class, "show_by_thread"]);

@@ -9,7 +9,7 @@ class MyCont extends Controller
 {
     public function main() {
         return response([
-            "message"=>"Nothing here. Just go away."
+            "message" => "Nothing here. Just go away."
         ], 418);
     }
     public function show_by_user($uid) {
@@ -19,7 +19,6 @@ class MyCont extends Controller
             "result" => $sql
         ];
     }
-
     public function show_by_thread($tid) {
         $sql = DB::select("SELECT uid as user, comment, rate, date FROM `comments` WHERE tid = ? ORDER BY date ASC", [$tid]);
         return [
