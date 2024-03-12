@@ -7,7 +7,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Comments;
-
+use App\Http\Controllers\UserApis;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,12 +60,8 @@ Route::post('/addcost', function (Request $request) {
     }
 });
 
-Route::post('/showlist', function (Request $request) {
-    $password = $request->password;
-    $email = $request->email;
-    $user = DB::select("select cost, listcost.tlid, title, users.id, name, email from touristlist left JOIN users ON touristlist.uid = users.id left JOIN listcost ON touristlist.tlid = listcost.tlid where email = ?", [$email]);
-    return response($user)->header("Access-Control-Allow-Origin", "*");
-});
+Route::get("/showlist/{email}", [UserApis::class, "showlist_get"]);
+Route::post("/showlist", [UserApis::class, "showlist"]);
 
 Route::post('/update', function (Request $request) {
 
