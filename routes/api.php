@@ -25,10 +25,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/', function() {
-    return response()->json(['message' => 'This is a test.']);
+    return response(['message' => 'This is a test.']);
 });
 Route::get('/test', function() {
-    return response()->json(['message' => 'This is a test.']);
+    return response(['message' => 'This is a test.']);
 });
 
 // Add APIs
