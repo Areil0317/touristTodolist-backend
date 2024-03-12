@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create("comments", function (Blueprint $table) {
-            $table->uuid("id");
+            $table->uuid("id")->primary();
             // ID relationships
             $table->bigInteger("uid")->comment("User ID. id in users table.");
             $table->bigInteger("tid")->comment("Item ID. id in items table. The 't' here means 'thread'.");
