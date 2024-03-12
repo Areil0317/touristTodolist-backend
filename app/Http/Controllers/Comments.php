@@ -31,7 +31,29 @@ class Comments extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            "uid" => "required",
+            "tid" => "required",
+            "comment" => "required|max:150",
+            "rate" => "required|max:10|min:1",
+        ]);
+        if( $validated ) {
+            $user = CommentModel::create([
+                "uid" => $validated["uid"],
+                "tid" => $validated["tid"],
+                "comment" => $validated["comment"],
+                "rate" => $validated["rate"],
+            ]);
+            return response([
+                "message" => 'Comment created',
+                // "comment" => $comment,
+            ]);
+        }
+        return response([
+            "message" => "Comment NOT created",
+            // "comment" => $comment,
+        ], 400);
+        // ->header('Access-Control-Allow-Origin', '*');
     }
 
     /**
