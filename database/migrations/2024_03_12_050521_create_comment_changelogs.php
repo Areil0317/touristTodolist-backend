@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create("comment_changelogs", function (Blueprint $table) {
-            $table->uuid("id");
+            $table->id();
             $table->string("cid")->comment("Comment ID. 'id' in the comment table.");
             $table->string("before")->comment("Comment before changing.");
             $table->string("after")->comment("Comment after changing.");

@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create("comments", function (Blueprint $table) {
-            $table->uuid("id")->primary();
+            $table->uuid("cid")->primary();
             // ID relationships
             $table->bigInteger("uid")->comment("User ID. id in users table.");
-            $table->bigInteger("tid")->comment("Item ID. id in items table. The 't' here means 'thread'.");
+            $table->bigInteger("pid")->comment("Project ID. pid in project table.");
             // Rating comments
             $table->string("comment")->default("")->comment("Comment for the item");
             $table->bigInteger("rate")->default(0)->comment("Rating for the item. Usually it should be 0~10.");
