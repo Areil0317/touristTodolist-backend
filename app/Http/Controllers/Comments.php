@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\CommentModel;
 
 class Comments extends Controller
 {
@@ -11,8 +12,10 @@ class Comments extends Controller
      */
     public function index()
     {
+        $comment = CommentModel::get();
         return [
-            "message" => "Hello comment"
+            "message" => "Hello comment",
+            "result" => $comment,
         ];
     }
 
@@ -34,25 +37,29 @@ class Comments extends Controller
         $validated = $request->validate([
             "uid" => "required",
             "pid" => "required",
-            "comment" => "required|max:150",
-            "rate" => "required|max:10|min:1",
+            "comment" => "required|string|max:150",
+            "rate" => "required|numeric|between:1,10",
         ]);
         if( $validated ) {
-            $user = CommentModel::create([
+            $comment = CommentModel::create([
                 "uid" => $validated["uid"],
                 "pid" => $validated["pid"],
                 "comment" => $validated["comment"],
                 "rate" => $validated["rate"],
             ]);
+            $message = $comment ? "Comment created" : "Comment NOT created";
+            $code = $comment ? 200 : 400;
             return response([
-                "message" => 'Comment created',
-                // "comment" => $comment,
-            ]);
+                "message" => $message,
+                "result" => $comment,
+            ], $code);
+        } else {
+            return response([
+                "message" => "Comment NOT created",
+                "result" => [],
+            ], 400);
         }
-        return response([
-            "message" => "Comment NOT created",
-            // "comment" => $comment,
-        ], 400);
+
         // ->header('Access-Control-Allow-Origin', '*');
     }
 
@@ -61,7 +68,11 @@ class Comments extends Controller
      */
     public function show(string $id)
     {
-        //
+        $comment = CommentModel::find($id);
+        return response([
+            "message" => "Testing...",
+            "result" => $comment,
+        ]);
     }
 
     /**
