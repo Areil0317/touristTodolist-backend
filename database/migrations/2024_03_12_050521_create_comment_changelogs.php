@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create("comment_changelogs", function (Blueprint $table) {
             $table->id();
-            $table->string("cid")->comment("Comment ID. 'id' in the comment table.");
+            $table->foreignUuid("cid")->on("comments")->comment("Comment ID. 'id' in the comment table.");
             $table->string("before")->comment("Comment before changing.");
             $table->string("after")->comment("Comment after changing.");
             $table->timestamps();
@@ -31,7 +31,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comment_changelog');
-        DB::unprepared('DROP TRIGGER `log_comment_changing`');
+        Schema::dropIfExists("comment_changelog");
+        DB::unprepared("DROP TRIGGER `log_comment_changing`");
     }
 };
