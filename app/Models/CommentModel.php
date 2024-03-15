@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Facades\DB;
 
 class CommentModel extends Model
 {
@@ -36,5 +37,23 @@ class CommentModel extends Model
     public function uniqueIds(): array
     {
         return ["cid"];
+    }
+
+    public function find_by_user($uid) {
+        try {
+            $result = DB::table("comments")->where("uid", $uid)->get();
+            return $result;
+        } catch(\Exception $error) {
+            return $error;
+        }
+    }
+
+    public function find_by_project($pid) {
+        try {
+            $result = DB::table("comments")->where("pid", $pid)->get();
+            return $result;
+        } catch(\Exception $error) {
+            return $error;
+        }
     }
 }

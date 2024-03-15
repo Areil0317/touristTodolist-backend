@@ -114,7 +114,9 @@ class Comments extends Controller
      * Get the user's comments.
      */
     public function show_by_user($uid) {
-        $sql = DB::select("SELECT pid as project, comment, rate, date FROM `comments` WHERE uid = ? ORDER BY date ASC", [$uid]);
+        $model = new CommentModel();
+        $sql = $model->find_by_user($uid);
+        // DB::select("SELECT pid as project, comment, rate, date FROM `comments` WHERE uid = ? ORDER BY date ASC", [$uid]);
         return [
             "uid" => $uid,
             "result" => $sql
@@ -125,7 +127,9 @@ class Comments extends Controller
      * Get the thread's comments.
      */
     public function show_by_thread($pid) {
-        $sql = DB::select("SELECT uid as user, comment, rate, date FROM `comments` WHERE pid = ? ORDER BY date ASC", [$pid]);
+        // $sql = DB::select("SELECT uid as user, comment, rate, date FROM `comments` WHERE pid = ? ORDER BY date ASC", [$pid]);
+        $model = new CommentModel();
+        $sql = $model->find_by_project($pid);
         return [
             "pid" => $pid,
             "result" => $sql

@@ -86,9 +86,11 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::resource("/comment", Comments::class);
 // Special comment APIs
 Route::get("/user-comment", [Comments::class, "no_id_given"]);
-Route::get("/thread-comment", [Comments::class, "no_id_given"]);
 Route::get("/user-comment/{uid}", [Comments::class, "show_by_user"]);
-Route::get("/thread-comment/{tid}", [Comments::class, "show_by_thread"]);
+// Route::get("/thread-comment", [Comments::class, "no_id_given"]);
+// Route::get("/thread-comment/{tid}", [Comments::class, "show_by_thread"]);
+Route::get("/project-comment", [Comments::class, "no_id_given"]);
+Route::get("/project-comment/{pid}", [Comments::class, "show_by_thread"]);
 
 // Attractions
 Route::resource("/attraction", Attractions::class);
