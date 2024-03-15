@@ -33,7 +33,7 @@ class Projects extends Controller
      */
     public function store(Request $request)
     {
-        $command = DB::table("attractions")->insert([
+        $command = DB::table("project")->insert([
             "aid" => $request->aid,
             "pname" => $request->pname,
         ]);
