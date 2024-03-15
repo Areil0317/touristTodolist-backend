@@ -6,8 +6,6 @@ use App\Http\Controllers\AuthController;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Comments;
-use App\Http\Controllers\UserApis;
 
 /*
 |--------------------------------------------------------------------------
@@ -91,3 +89,8 @@ Route::get("/user-comment", [Comments::class, "no_id_given"]);
 Route::get("/thread-comment", [Comments::class, "no_id_given"]);
 Route::get("/user-comment/{uid}", [Comments::class, "show_by_user"]);
 Route::get("/thread-comment/{tid}", [Comments::class, "show_by_thread"]);
+
+// Attractions
+Route::resource("/attraction", Attractions::class);
+// Projects
+Route::resource("/project", Projects::class);
