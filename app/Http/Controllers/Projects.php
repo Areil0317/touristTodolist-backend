@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Projects extends Controller
 {
@@ -41,7 +42,7 @@ class Projects extends Controller
         $code = $command ? 200 : 400;
         return response([
             "message" => $message,
-            "payload" => $command,
+            "result" => $command,
         ], $code)->header("Access-Control-Allow-Origin", "*");
     }
 
@@ -55,7 +56,25 @@ class Projects extends Controller
         $code = $command ? 200 : 400;
         return response([
             "message" => $message,
-            "payload" => $command,
+            "result" => $command,
+        ], $code)->header("Access-Control-Allow-Origin", "*");
+    }
+
+    private function get_aid(string $aname) {
+        $attraction_cont = new Attractions();
+        $aid_src = $attraction_cont->show_by_name($aname);
+        return $aid_src->original["result"][0]->aid;
+    }
+
+    public function show_by_attraction(string $aname)
+    {
+        $aid = $this->get_aid($aname);
+        $command = DB::table("project")->where("aid", [$aid])->get();
+        $message = $command ? "Success" : "Error";
+        $code = $command ? 200 : 400;
+        return response([
+            "message" => $message,
+            "result" => $command,
         ], $code)->header("Access-Control-Allow-Origin", "*");
     }
 
@@ -91,7 +110,7 @@ class Projects extends Controller
         $code = $command ? 200 : 400;
         return response([
             "message" => $message,
-            "payload" => $command,
+            "result" => $command,
         ], $code)->header("Access-Control-Allow-Origin", "*");
     }
 }

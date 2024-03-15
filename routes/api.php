@@ -92,5 +92,8 @@ Route::get("/thread-comment/{tid}", [Comments::class, "show_by_thread"]);
 
 // Attractions
 Route::resource("/attraction", Attractions::class);
+Route::get("/attraction-name/{aname}", [Attractions::class, "show_by_name"]);
+
 // Projects
 Route::resource("/project", Projects::class);
+Route::get("/project-aname/{aname}", [Projects::class, "show_by_attraction"]);

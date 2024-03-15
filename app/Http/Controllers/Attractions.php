@@ -40,7 +40,7 @@ class Attractions extends Controller
         $code = $command ? 200 : 400;
         return response([
             "message" => $message,
-            "payload" => $command,
+            "result" => $command,
         ], $code)->header("Access-Control-Allow-Origin", "*");
     }
 
@@ -54,7 +54,7 @@ class Attractions extends Controller
         $code = $command ? 200 : 400;
         return response([
             "message" => $message,
-            "payload" => $command,
+            "result" => $command,
         ], $code)->header("Access-Control-Allow-Origin", "*");
     }
 
@@ -88,7 +88,18 @@ class Attractions extends Controller
         $code = $command ? 200 : 400;
         return response([
             "message" => $message,
-            "payload" => $command,
+            "result" => $command,
+        ], $code)->header("Access-Control-Allow-Origin", "*");
+    }
+
+    public function show_by_name(string $aname)
+    {
+        $command = DB::table("attractions")->where("aname", [$aname])->get();
+        $message = count($command) > 0 ? "Success" : "Not found";
+        $code = count($command) > 0 ? 200 : 404;
+        return response([
+            "message" => $message,
+            "result" => $command,
         ], $code)->header("Access-Control-Allow-Origin", "*");
     }
 }
