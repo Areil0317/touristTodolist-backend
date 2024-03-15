@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create("comments", function (Blueprint $table) {
             $table->uuid("cid")->primary();
             // ID relationships
-            $table->foreignId("uid")->references("aid")->on("attractions")->comment("User ID. id in users table.");
+            $table->foreignId("uid")->references("uid")->on("users")->comment("User ID. id in users table.");
             $table->foreignId("pid")->references("pid")->on("project")->comment("Project ID. pid in project table.");
             // Rating comments
             $table->string("comment")->default("")->comment("Comment for the item");
