@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,7 +12,7 @@ return new class extends Migration
     {
 
         Schema::create('users', function (Blueprint $table) {
-            $table->id('uid');
+            $table->id();
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
@@ -25,7 +24,7 @@ return new class extends Migration
 
         Schema::create('touristlist', function (Blueprint $table) {
             $table->id('tlid');
-            $table->foreignId('uid')->references('uid')->on('users');
+            $table->foreignId('uid')->references('id')->on('users');
             $table->string('title');
             $table->timestamps();
             $table->dateTime('start_date');
