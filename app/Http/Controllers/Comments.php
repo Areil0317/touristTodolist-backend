@@ -33,14 +33,14 @@ class Comments extends Controller
     {
         $validated = $request->validate([
             "uid" => "required",
-            "tid" => "required",
+            "pid" => "required",
             "comment" => "required|max:150",
             "rate" => "required|max:10|min:1",
         ]);
         if( $validated ) {
             $user = CommentModel::create([
                 "uid" => $validated["uid"],
-                "tid" => $validated["tid"],
+                "pid" => $validated["pid"],
                 "comment" => $validated["comment"],
                 "rate" => $validated["rate"],
             ]);
@@ -103,7 +103,7 @@ class Comments extends Controller
      * Get the user's comments.
      */
     public function show_by_user($uid) {
-        $sql = DB::select("SELECT tid as thread, comment, rate, date FROM `comments` WHERE uid = ? ORDER BY date ASC", [$uid]);
+        $sql = DB::select("SELECT pid as project, comment, rate, date FROM `comments` WHERE uid = ? ORDER BY date ASC", [$uid]);
         return [
             "uid" => $uid,
             "result" => $sql
@@ -113,10 +113,10 @@ class Comments extends Controller
     /**
      * Get the thread's comments.
      */
-    public function show_by_thread($tid) {
-        $sql = DB::select("SELECT uid as user, comment, rate, date FROM `comments` WHERE tid = ? ORDER BY date ASC", [$tid]);
+    public function show_by_thread($pid) {
+        $sql = DB::select("SELECT uid as user, comment, rate, date FROM `comments` WHERE pid = ? ORDER BY date ASC", [$pid]);
         return [
-            "tid" => $tid,
+            "pid" => $pid,
             "result" => $sql
         ];
     }
