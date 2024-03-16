@@ -7,6 +7,14 @@ use Illuminate\Support\Facades\DB;
 
 class Attractions extends Controller
 {
+    private function api_formation($actrion_success, $input = "") {
+        $message = $actrion_success ? "Success" : "Error";
+        return [
+            "message" => $message,
+            "input" => $input,
+            "result" => $actrion_success,
+        ];
+    }
     /**
      * Display a listing of the resource.
      */
@@ -36,12 +44,8 @@ class Attractions extends Controller
         $command = DB::table("attractions")->insert([
             "aname" => $request->aname
         ]);
-        $message = $command ? "Success" : "Error";
         $code = $command ? 200 : 400;
-        return response([
-            "message" => $message,
-            "result" => $command,
-        ], $code)->header("Access-Control-Allow-Origin", "*");
+        return response( $this->api_formation($command, $request->aname), $code )->header("Access-Control-Allow-Origin", "*");
     }
 
     /**
@@ -50,12 +54,8 @@ class Attractions extends Controller
     public function show(string $id)
     {
         $command = DB::table("attractions")->where("aid", [$id])->get();
-        $message = $command ? "Success" : "Error";
         $code = $command ? 200 : 400;
-        return response([
-            "message" => $message,
-            "result" => $command,
-        ], $code)->header("Access-Control-Allow-Origin", "*");
+        return response( $this->api_formation($command, $id), $code)->header("Access-Control-Allow-Origin", "*");
     }
 
     /**
@@ -84,22 +84,14 @@ class Attractions extends Controller
     public function destroy(string $id)
     {
         $command = DB::table("attractions")->where("aid", [$id])->delete();
-        $message = $command ? "Success" : "Error";
         $code = $command ? 200 : 400;
-        return response([
-            "message" => $message,
-            "result" => $command,
-        ], $code)->header("Access-Control-Allow-Origin", "*");
+        return response( $this->api_formation($command, $id), $code)->header("Access-Control-Allow-Origin", "*");
     }
 
     public function show_by_name(string $aname)
     {
         $command = DB::table("attractions")->where("aname", [$aname])->get();
-        $message = count($command) > 0 ? "Success" : "Not found";
         $code = count($command) > 0 ? 200 : 404;
-        return response([
-            "message" => $message,
-            "result" => $command,
-        ], $code)->header("Access-Control-Allow-Origin", "*");
+        return response( $this->api_formation($command, $aname), $code)->header("Access-Control-Allow-Origin", "*");
     }
 }

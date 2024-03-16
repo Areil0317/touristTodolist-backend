@@ -7,6 +7,14 @@ use Illuminate\Support\Facades\DB;
 
 class Projects extends Controller
 {
+    private function api_formation($actrion_success, $input = "") {
+        $message = $actrion_success ? "Success" : "Error";
+        return [
+            "message" => $message,
+            "input" => $input,
+            "result" => $actrion_success,
+        ];
+    }
     /**
      * Display a listing of the resource.
      */
@@ -26,7 +34,6 @@ class Projects extends Controller
         return response([
             "message" => "Method not supported"
         ], 405);
-        //
     }
 
     /**
@@ -34,16 +41,14 @@ class Projects extends Controller
      */
     public function store(Request $request)
     {
-        $command = DB::table("project")->insert([
+        $input = [
             "aid" => $request->aid,
             "pname" => $request->pname,
-        ]);
+        ];
+        $command = DB::table("project")->insert($input);
         $message = $command ? "Success" : "Error";
         $code = $command ? 200 : 400;
-        return response([
-            "message" => $message,
-            "result" => $command,
-        ], $code)->header("Access-Control-Allow-Origin", "*");
+        return response($this->api_formation($command, $input), $code)->header("Access-Control-Allow-Origin", "*");
     }
 
     /**
@@ -54,10 +59,7 @@ class Projects extends Controller
         $command = DB::table("project")->where("pid", [$id])->get();
         $message = $command ? "Success" : "Error";
         $code = $command ? 200 : 400;
-        return response([
-            "message" => $message,
-            "result" => $command,
-        ], $code)->header("Access-Control-Allow-Origin", "*");
+        return response($this->api_formation($command, $id), $code)->header("Access-Control-Allow-Origin", "*");
     }
 
     private function get_aid(string $aname) {
@@ -72,10 +74,7 @@ class Projects extends Controller
         $command = DB::table("project")->where("aid", [$aid])->get();
         $message = $command ? "Success" : "Error";
         $code = $command ? 200 : 400;
-        return response([
-            "message" => $message,
-            "result" => $command,
-        ], $code)->header("Access-Control-Allow-Origin", "*");
+        return response($this->api_formation($command, $aname), $code)->header("Access-Control-Allow-Origin", "*");
     }
 
     /**
@@ -108,9 +107,6 @@ class Projects extends Controller
         $command = DB::table("project")->where("pid", [$id])->delete();
         $message = $command ? "Success" : "Error";
         $code = $command ? 200 : 400;
-        return response([
-            "message" => $message,
-            "result" => $command,
-        ], $code)->header("Access-Control-Allow-Origin", "*");
+        return response($this->api_formation($command, $id), $code)->header("Access-Control-Allow-Origin", "*");
     }
 }
