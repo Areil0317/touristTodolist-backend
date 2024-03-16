@@ -9,5 +9,4 @@ class CommentChangelog extends Model
 {
     use HasFactory;
     protected $table = "comment_changelogs";
-    // protected $primaryKey = "cid";
 }
