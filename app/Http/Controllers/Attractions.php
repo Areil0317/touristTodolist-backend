@@ -37,15 +37,28 @@ class Attractions extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created resource in storage. Result returns:
+     *
+     * 1. an `id` if success sotred.
+     * 2. a data if the data already exist.
+     * 3. `false` if the `aname` param does not exist.
      */
     public function store(Request $request)
     {
+        if( !isset($request->aname) ) {
+            $api_result = $this->api_formation(
+                isset($request->aname),
+                $request->aname,
+                "Parameter not compeleted"
+            );
+            return response( $api_result, 400 );
+        }
         $check = DB::table("attractions")->where("aname", $request->aname)->get();
         if( count($check) > 0 ) {
             $api_result = $this->api_formation(
                 $check,
-                $request->aname, "Data already exist"
+                $request->aname,
+                "Data already exist"
             );
             return response( $api_result, 409 );
         }

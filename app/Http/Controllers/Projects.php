@@ -37,7 +37,11 @@ class Projects extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created resource in storage. Result returns:
+     *
+     * 1. an `id` if success sotred.
+     * 2. a data if the data already exist.
+     * 3. `false` if either of params does not exist.
      */
     public function store(Request $request)
     {
@@ -47,9 +51,9 @@ class Projects extends Controller
         ];
         if( !isset($input["aid"]) || !isset($input["pname"]) ) {
             $api_result = $this->api_formation(
-                isset($input["aid"]) && isset($input["pname"]),
+                false,
                 $input,
-                "Data not compeleted"
+                "Parameters not compeleted"
             );
             return response( $api_result, 400 );
         }
