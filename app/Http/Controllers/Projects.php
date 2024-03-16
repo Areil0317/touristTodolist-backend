@@ -7,12 +7,12 @@ use Illuminate\Support\Facades\DB;
 
 class Projects extends Controller
 {
-    private function api_formation($actrion_success, $input = "") {
-        $message = $actrion_success ? "Success" : "Error";
+    private function api_formation($result, $input = "") {
+        $message = $result ? "Success" : "Error";
         return [
             "message" => $message,
             "input" => $input,
-            "result" => $actrion_success,
+            "result" => $result,
         ];
     }
     /**
@@ -45,8 +45,7 @@ class Projects extends Controller
             "aid" => $request->aid,
             "pname" => $request->pname,
         ];
-        $command = DB::table("project")->insert($input);
-        $message = $command ? "Success" : "Error";
+        $command = DB::table("project")->insertGetId($input);
         $code = $command ? 200 : 400;
         return response($this->api_formation($command, $input), $code)->header("Access-Control-Allow-Origin", "*");
     }
@@ -57,7 +56,6 @@ class Projects extends Controller
     public function show(string $id)
     {
         $command = DB::table("project")->where("pid", [$id])->get();
-        $message = $command ? "Success" : "Error";
         $code = $command ? 200 : 400;
         return response($this->api_formation($command, $id), $code)->header("Access-Control-Allow-Origin", "*");
     }
@@ -72,7 +70,6 @@ class Projects extends Controller
     {
         $aid = $this->get_aid($aname);
         $command = DB::table("project")->where("aid", [$aid])->get();
-        $message = $command ? "Success" : "Error";
         $code = $command ? 200 : 400;
         return response($this->api_formation($command, $aname), $code)->header("Access-Control-Allow-Origin", "*");
     }
@@ -105,7 +102,6 @@ class Projects extends Controller
     public function destroy(string $id)
     {
         $command = DB::table("project")->where("pid", [$id])->delete();
-        $message = $command ? "Success" : "Error";
         $code = $command ? 200 : 400;
         return response($this->api_formation($command, $id), $code)->header("Access-Control-Allow-Origin", "*");
     }

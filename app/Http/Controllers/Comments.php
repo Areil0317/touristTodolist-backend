@@ -59,8 +59,6 @@ class Comments extends Controller
                 "result" => [],
             ], 400);
         }
-
-        // ->header('Access-Control-Allow-Origin', '*');
     }
 
     /**

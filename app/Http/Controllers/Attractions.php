@@ -7,12 +7,12 @@ use Illuminate\Support\Facades\DB;
 
 class Attractions extends Controller
 {
-    private function api_formation($actrion_success, $input = "") {
-        $message = $actrion_success ? "Success" : "Error";
+    private function api_formation($result, $input = "") {
+        $message = $result ? "Success" : "Error";
         return [
             "message" => $message,
             "input" => $input,
-            "result" => $actrion_success,
+            "result" => $result,
         ];
     }
     /**
@@ -41,7 +41,7 @@ class Attractions extends Controller
      */
     public function store(Request $request)
     {
-        $command = DB::table("attractions")->insert([
+        $command = DB::table("attractions")->insertGetId([
             "aname" => $request->aname
         ]);
         $code = $command ? 200 : 400;
