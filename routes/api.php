@@ -29,7 +29,7 @@ Route::get('/test', function() {
     return response(['message' => 'This is a test.']);
 });
 
-// Add APIs
+// Adding APIs
 Route::post('/add', function (Request $request) {
     $title = $request->title;
     $email = $request->email;
@@ -58,6 +58,7 @@ Route::post('/addcost', function (Request $request) {
     }
 });
 
+// Showlist APIs
 Route::get("/showlist/{email}", [UserApis::class, "showlist_get"]);
 Route::post("/showlist", [UserApis::class, "showlist"]);
 
@@ -88,8 +89,6 @@ Route::resource("/comment", Comments::class);
 // Special comment APIs
 Route::get("/user-comment", [Comments::class, "no_id_given"]);
 Route::get("/user-comment/{uid}", [Comments::class, "show_by_user"]);
-// Route::get("/thread-comment", [Comments::class, "no_id_given"]);
-// Route::get("/thread-comment/{tid}", [Comments::class, "show_by_thread"]);
 Route::get("/project-comment", [Comments::class, "no_id_given"]);
 Route::get("/project-comment/{pid}", [Comments::class, "show_by_thread"]);
 
