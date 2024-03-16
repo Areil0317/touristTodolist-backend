@@ -57,4 +57,14 @@ class AuthController extends Controller
             ->header('Access-Control-Allow-Origin', '*');
         ;
     }
+
+    // 在AuthController中添加登出方法
+    public function logout(Request $request)
+    {
+        // 假設你使用 Laravel Sanctum
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json(['message' => 'Successfully logged out']);
+    }
+
 }
