@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\DB;
 
 class Attractions extends Controller
 {
-    private function api_formation($result, $input = "") {
-        $message = $result ? "Success" : "Error";
+    private function api_formation($result, $input = "", $input_message = "") {
+        $default_message = $result ? "Success" : "Error";
         return [
-            "message" => $message,
+            "message" => $input_message ? $input_message : $default_message,
             "input" => $input,
             "result" => $result,
         ];
@@ -41,6 +41,15 @@ class Attractions extends Controller
      */
     public function store(Request $request)
     {
+        $check = DB::table("attractions")->where("aname", $request->aname)->get();
+        if( count($check) > 0 ) {
+            return response(
+                $this->api_formation(
+                    $check,
+                    $request->aname, "Data already exist"
+                ), 409
+            );
+        }
         $command = DB::table("attractions")->insertGetId([
             "aname" => $request->aname
         ]);

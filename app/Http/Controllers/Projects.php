@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\DB;
 
 class Projects extends Controller
 {
-    private function api_formation($result, $input = "") {
+    private function api_formation($result, $input = "", $input_message = "") {
         $message = $result ? "Success" : "Error";
         return [
-            "message" => $message,
+            "message" => $input_message ? $input_message : $default_message,
             "input" => $input,
             "result" => $result,
         ];
@@ -45,6 +45,29 @@ class Projects extends Controller
             "aid" => $request->aid,
             "pname" => $request->pname,
         ];
+        if( !isset($input["aid"]) || !isset($input["pname"]) ) {
+            return response(
+                $this->api_formation(
+                    isset($input["aid"]) && isset($input["pname"]),
+                    $input,
+                    "Data not compeleted"
+                ), 400
+            );
+        }
+        // Check data existed
+        $check = DB::table("project")
+            ->where("aid", $request->aid)
+            ->where("pname", $request->pname)
+            ->get();
+        if( count($check) > 0 ) {
+            return response(
+                $this->api_formation(
+                    $check, $input,
+                    "Data already exist"
+                ), 409
+            );
+        }
+        // Insert data
         $command = DB::table("project")->insertGetId($input);
         $code = $command ? 200 : 400;
         return response($this->api_formation($command, $input), $code)->header("Access-Control-Allow-Origin", "*");
