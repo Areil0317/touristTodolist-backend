@@ -68,9 +68,8 @@ class Comments extends Controller
     {
         $comment = CommentModel::find($id);
         return response([
-            "message" => "Testing...",
             "result" => $comment,
-        ]);
+        ], $comment ? 200 : 404);
     }
 
     /**
@@ -88,7 +87,24 @@ class Comments extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        if( !isset($request->comment) && !isset($request->rate) ) {
+            return response(["result" => "Parameter not compeleted"], 400);
+        }
+        $comment = CommentModel::find($id);
+        $comment->comment = isset($request->comment) ? $request->comment : $comment->comment;
+        $comment->rate = isset($request->rate) ? $request->rate : $comment->rate;
+        // Save progress
+        $saved = $comment->save();
+        if( $saved ) {
+            return response([
+                "message" => "Success",
+                "result" => $comment,
+            ], 200);
+        } else {
+            return response([
+                "result" => "NOT success"
+            ], 400);
+        }
     }
 
     /**
@@ -96,7 +112,13 @@ class Comments extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $comment = CommentModel::find($id);
+        $saved = $comment-remove();
+        if( $saved ) {
+            return response(["message" => "Success"], 200);
+        } else {
+            return response(["result" => "NOT success"], 400);
+        }
     }
 
     /**
@@ -114,7 +136,6 @@ class Comments extends Controller
     public function show_by_user($uid) {
         $model = new CommentModel();
         $sql = $model->find_by_user($uid);
-        // DB::select("SELECT pid as project, comment, rate, date FROM `comments` WHERE uid = ? ORDER BY date ASC", [$uid]);
         return [
             "uid" => $uid,
             "result" => $sql
@@ -125,7 +146,6 @@ class Comments extends Controller
      * Get the thread's comments.
      */
     public function show_by_thread($pid) {
-        // $sql = DB::select("SELECT uid as user, comment, rate, date FROM `comments` WHERE pid = ? ORDER BY date ASC", [$pid]);
         $model = new CommentModel();
         $sql = $model->find_by_project($pid);
         return [
