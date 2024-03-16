@@ -43,12 +43,11 @@ class Attractions extends Controller
     {
         $check = DB::table("attractions")->where("aname", $request->aname)->get();
         if( count($check) > 0 ) {
-            return response(
-                $this->api_formation(
-                    $check,
-                    $request->aname, "Data already exist"
-                ), 409
+            $api_result = $this->api_formation(
+                $check,
+                $request->aname, "Data already exist"
             );
+            return response( $api_result, 409 );
         }
         $command = DB::table("attractions")->insertGetId([
             "aname" => $request->aname

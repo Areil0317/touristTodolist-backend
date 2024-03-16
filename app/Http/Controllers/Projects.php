@@ -46,13 +46,12 @@ class Projects extends Controller
             "pname" => $request->pname,
         ];
         if( !isset($input["aid"]) || !isset($input["pname"]) ) {
-            return response(
-                $this->api_formation(
-                    isset($input["aid"]) && isset($input["pname"]),
-                    $input,
-                    "Data not compeleted"
-                ), 400
+            $api_result = $this->api_formation(
+                isset($input["aid"]) && isset($input["pname"]),
+                $input,
+                "Data not compeleted"
             );
+            return response( $api_result, 400 );
         }
         // Check data existed
         $check = DB::table("project")
@@ -60,12 +59,11 @@ class Projects extends Controller
             ->where("pname", $request->pname)
             ->get();
         if( count($check) > 0 ) {
-            return response(
-                $this->api_formation(
-                    $check, $input,
-                    "Data already exist"
-                ), 409
+            $api_result = $this->api_formation(
+                $check, $input,
+                "Data already exist"
             );
+            return response( $api_result, 409 );
         }
         // Insert data
         $command = DB::table("project")->insertGetId($input);
