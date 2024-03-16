@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CommentModel extends Model
 {
@@ -55,5 +56,13 @@ class CommentModel extends Model
         } catch(\Exception $error) {
             return $error;
         }
+    }
+
+    /**
+     * Get the comment's changelog.
+     */
+    public function comment_histroy(): HasMany
+    {
+        return $this->hasMany(CommentChangelog::class, "cid");
     }
 }
