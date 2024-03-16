@@ -86,6 +86,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 
 // Comment APIs
 Route::resource("/comment", Comments::class);
+
 // Special comment APIs
 Route::get("/user-comment", [Comments::class, "no_id_given"]);
 Route::get("/user-comment/{uid}", [Comments::class, "show_by_user"]);
@@ -95,7 +96,9 @@ Route::get("/project-comment/{pid}", [Comments::class, "show_by_thread"]);
 // Attractions
 Route::resource("/attraction", Attractions::class);
 Route::get("/attraction-name/{aname}", [Attractions::class, "show_by_name"]);
+// Route::get("/attraction-aname/{aname}", [Attractions::class, "show_by_name"]);
 
 // Projects
 Route::resource("/project", Projects::class);
-Route::get("/project-aname/{aname}", [Projects::class, "show_by_attraction"]);
+Route::get("/project-name/{aname}", [Projects::class, "show_by_attraction"]);
+// Route::get("/project-aname/{aname}", [Projects::class, "show_by_attraction"]);
