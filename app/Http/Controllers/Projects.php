@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 class Projects extends Controller
 {
     private function api_formation($result, $input = "", $input_message = "") {
-        $message = $result ? "Success" : "Error";
+        $default_message = $result ? "Success" : "Error";
         return [
             "message" => $input_message ? $input_message : $default_message,
             "input" => $input,
