@@ -58,11 +58,16 @@ class CommentModel extends Model
         }
     }
 
+    public function comment_histroy_source(): HasMany
+    {
+        return $this->hasMany(CommentChangelog::class, "cid");
+    }
+
     /**
      * Get the comment's changelog.
      */
-    public function comment_histroy(): HasMany
+    public function comment_histroy()
     {
-        return $this->hasMany(CommentChangelog::class, "cid");
+        return $this->comment_histroy_source()->select("before", "after")->get();
     }
 }

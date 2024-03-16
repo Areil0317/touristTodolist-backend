@@ -74,7 +74,7 @@ class Comments extends Controller
         $comment = CommentModel::find($id);
         return response([
             "result" => $comment,
-            "histroy" => $comment->comment_histroy()->get(),
+            "histroy" => $comment->comment_histroy(),
         ], $comment ? 200 : 404);
     }
 
