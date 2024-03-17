@@ -1,8 +1,10 @@
 <?php
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -22,34 +24,47 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/', function() {
+Route::get('/', function () {
     return response(['message' => 'This is a test.']);
 });
-Route::get('/test', function() {
+Route::get('/test', function () {
     return response(['message' => 'This is a test.']);
 });
 
-// Adding APIs
-Route::post('/add', function (Request $request) {
-    $title = $request->title;
-    $email = $request->email;
-    $uid = DB::select('select uid from users where email = ?' , [$email]);
 
-    if (!empty($uid)) {
-        $uid = $uid[0]->uid;
-        DB::insert('insert into touristlist (title,uid) VALUES (?,?)', [$title, $uid]);
-        echo "OK";
-    } else {
-        echo "User not found";
-    }
-});
+// List APIs
+Route::post('/POST/addlist', [ListController::class, "addList_post"]);
+Route::post('/POST/deletelist', [ListController::class, "deleteList_post"]);
+Route::post('/POST/updatelist', [ListController::class, "updateList_post"]);
+Route::post('/POST/selectlist', [ListController::class, "selectList_post"]);
+//
+
+// Journey APIs
+Route::post('/POST/addjourney', [JourneyController::class, "addJourney_post"]);
+Route::post('/POST/deletejourney', [JourneyController::class, "deleteJourney_post"]);
+Route::post('/POST/updatejourney', [JourneyController::class, "updateJourney_post"]);
+Route::post('/POST/selectjourney', [JourneyController::class, "selectJourney_post"]);
+Route::post('/POST/addjbudget', [JourneyController::class, "addJbudget_post"]);
+Route::post('/POST/deletejbudget', [JourneyController::class, "deleteJbudget_post"]);
+Route::post('/POST/updatejbudget', [JourneyController::class, "updateJbudget_post"]);
+Route::post('/POST/selectjbudget', [JourneyController::class, "selectJbudget_post"]);
+Route::post('/POST/addjimage', [JourneyController::class, "addJimage_post"]);
+Route::post('/POST/deletejimage', [JourneyController::class, "deleteJimage_post"]);
+Route::post('/POST/updatejimage', [JourneyController::class, "updateJimage_post"]);
+Route::post('/POST/selectjimage', [JourneyController::class, "selectJimage_post"]);
+//
+
+// JourneyProject APIs
+Route::post('/POST/addjourneyproject', [JourneyProjectController::class, "addJourneyProject_post"]);
+//
+
 
 Route::post('/addcost', function (Request $request) {
     $title = $request->title;
     $cost = $request->cost;
-    $tlid = DB::select('select tlid from touristlist where title = ?' , [$title]);
+    $tlid = DB::select('select tlid from touristlist where title = ?', [$title]);
 
-    if (!empty($tlid)) {
+    if (!empty ($tlid)) {
         $tlid = $tlid[0]->tlid;
         DB::insert('insert into listcost (cost,tlid) VALUES (?,?)', [$cost, $tlid]);
         echo "OK";
