@@ -106,7 +106,7 @@ Route::resource("/comment", Comments::class);
 Route::get("/user-comment", [Comments::class, "no_id_given"]);
 Route::get("/user-comment/{uid}", [Comments::class, "show_by_user"]);
 Route::get("/project-comment", [Comments::class, "no_id_given"]);
-Route::get("/project-comment/{pid}", [Comments::class, "show_by_thread"]);
+Route::get("/project-comment/{pid}", [Comments::class, "show_by_pid"]);
 
 // Attractions
 Route::resource("/attraction", Attractions::class);

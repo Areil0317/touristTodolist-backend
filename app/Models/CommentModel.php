@@ -40,9 +40,41 @@ class CommentModel extends Model
         return ["cid"];
     }
 
+    // API formation
+    static public function api_item_formation($item) {
+        return [
+            "cid" => $item["cid"],
+            "uid" => $item["uid"],
+            "pid" => $item["pid"],
+            "comment" => $item["comment"],
+            "rate" => $item["rate"],
+            "created_at" => $item["created_at"],
+            "photo" => $item["userdata"]["photo"],
+        ];
+    }
+    static public function find_by_api_formation($item, $photo) {
+        return [
+            "cid" => $item["cid"],
+            "uid" => $item["uid"],
+            "pid" => $item["pid"],
+            "comment" => $item["comment"],
+            "rate" => $item["rate"],
+            "created_at" => $item["created_at"],
+            "photo" => $photo,
+        ];
+    }
     public function find_by_user($uid) {
+        // Get user
+        $user = User::find($uid);
+        $photo = $user->photo;
         try {
-            $result = DB::table("comments")->where("uid", $uid)->get();
+            $sql = $this->where("uid", $uid)->get();
+            $data = $sql->toArray();
+            // Retrive datas
+            $result = array();
+            foreach ($data as $item) {
+                $result[] = $this->find_by_api_formation($item, $photo);
+            }
             return $result;
         } catch(\Exception $error) {
             return $error;
@@ -51,16 +83,18 @@ class CommentModel extends Model
 
     public function find_by_project($pid) {
         try {
-            $result = DB::table("comments")->where("pid", $pid)->get();
+            $sql = $this->where("pid", $pid)->get();
+            $data = $sql->toArray();
+            $result = array();
+            foreach ($data as $item) {
+                $user = User::find($item["uid"]);
+                $photo = $user->photo;
+                $result[] = $this->find_by_api_formation($item, $photo);
+            }
             return $result;
         } catch(\Exception $error) {
             return $error;
         }
-    }
-
-    public function comment_histroy_source(): HasMany
-    {
-        return $this->hasMany(CommentChangelog::class, "cid");
     }
 
     /**
@@ -69,5 +103,28 @@ class CommentModel extends Model
     public function comment_histroy()
     {
         return $this->comment_histroy_source()->select("before", "after")->get();
+    }
+
+    // API prop metadatas
+    /**
+     * Get the user's metadata.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, "uid", "id");
+    }
+
+    /**
+     * Get the commentlog's metadata.
+     */
+    public function comment_histroy_source(): HasMany
+    {
+        return $this->hasMany(CommentChangelog::class, "cid");
+    }
+
+    public function userdata()
+    {
+        $source = $this->user()->select("id", "name", "email", "photo");
+        return $source;
     }
 }
