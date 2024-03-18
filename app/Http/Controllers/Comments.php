@@ -10,7 +10,13 @@ class Comments extends Controller
 {
     public function __construct()
     {
-        $this->middleware("auth:sanctum")->except(["index", "show"]);
+        $this->middleware("auth:sanctum")->except([
+            "index",
+            "show",
+            "no_id_given",
+            "show_by_user",
+            "show_by_pid",
+        ]);
     }
 
     /**
@@ -73,10 +79,9 @@ class Comments extends Controller
     public function show(string $id)
     {
         $comment = CommentModel::find($id);
-        return response([
-            "result" => $comment,
-            "histroy" => $comment->comment_histroy(),
-        ], $comment ? 200 : 404);
+        $histroy = isset($comment) ? $comment->comment_histroy() : [];
+        $code = isset($comment) ? 200 : 404;
+        return response([ "result" => $comment, "histroy" => $histroy, ], $code);
     }
 
     /**
@@ -168,7 +173,7 @@ class Comments extends Controller
     /**
      * Get the thread's comments.
      */
-    public function show_by_thread($pid) {
+    public function show_by_pid($pid) {
         $model = new CommentModel();
         $sql = $model->find_by_project($pid);
         return [
