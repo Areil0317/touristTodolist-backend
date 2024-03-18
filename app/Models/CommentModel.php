@@ -96,9 +96,6 @@ class CommentModel extends Model
     public function find_by_project($pid) {
         try {
             $result = $this->where("pid", $pid)->get();
-            // var_dump(  
-            //     $this->get_fbp_response_data
-            // );
             return $this->get_fbp_response_data( $result->toArray() );
         } catch(\Exception $error) {
             return $error;
