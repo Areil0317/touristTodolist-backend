@@ -27,8 +27,9 @@ class ListController extends Controller
         } else {
             $model->end_date = $request->end_date;
         }
-
-        if ($model->end_date < $model->start_date) {
+        $startDate = strtotime($model->start_date);
+        $endDate = strtotime($model->end_date);
+        if ($endDate < $startDate) {
             $model->end_date = $model->start_date;
         }
 
@@ -71,7 +72,9 @@ class ListController extends Controller
             $model->end_date = $request->end_date;
         }
 
-        if ($model->end_date < $model->start_date) {
+        $startDate = strtotime($model->start_date);
+        $endDate = strtotime($model->end_date);
+        if ($endDate < $startDate) {
             $model->end_date = $model->start_date;
         }
 

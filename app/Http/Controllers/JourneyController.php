@@ -32,13 +32,13 @@ class JourneyController extends Controller
         $model->tlid = $tlid;
         $model->aid = $attraction->aid;
 
+        $startDate = strtotime($list->start_date);
+        $endDate = strtotime($list->end_date);
+
         if ($request->arrived_date == null) {
             $model->arrived_date = $list->start_date;
         } else {
-            $startDate = strtotime($list->start_date);
             $arrivedDate = strtotime($request->arrived_date);
-            $endDate = strtotime($list->end_date);
-
             if ($startDate <= $arrivedDate && $arrivedDate <= $endDate) {
                 $model->arrived_date = $request->arrived_date;
             } else {
@@ -49,7 +49,13 @@ class JourneyController extends Controller
         if ($request->leaved_date == null) {
             $model->leaved_date = $model->arrived_date;
         } else {
-            $model->leaved_date = $request->leaved_date;
+            $leavedDate = strtotime($request->leaved_date);
+            if ($startDate <= $leavedDate && $leavedDate <= $endDate) {
+                $model->leaved_date = $request->leaved_date;
+            } else {
+                $model->leaved_date = $list->end_date;
+            }
+            
         }
 
         $model->arrived_time = $request->arrived_time;
@@ -72,7 +78,11 @@ class JourneyController extends Controller
         $model->jmemo = $request->jmemo;
         $model->jreview = $request->jreview;
         $model->jrate = $request->jrate;
-        $model->jchecked = $request->jchecked;
+        if(!isset($request->jchecked)){
+            $model->jchecked = "0";
+        }else{
+            $model->jchecked = $request->jchecked;
+        }
 
         $model->save();
 
@@ -106,13 +116,14 @@ class JourneyController extends Controller
         $tlid = $model->tlid;
         $list = ListModel::find($tlid);
 
+        $startDate = strtotime($list->start_date);
+        $endDate = strtotime($list->end_date);
+
         //防止使用者把日曆input清空
         if ($request->arrived_date == null) {
             $model->arrived_date = $list->start_date;
         } else {
-            $startDate = strtotime($list->start_date);
             $arrivedDate = strtotime($request->arrived_date);
-            $endDate = strtotime($list->end_date);
 
             if ($startDate <= $arrivedDate && $arrivedDate <= $endDate) {
                 $model->arrived_date = $request->arrived_date;
@@ -124,7 +135,12 @@ class JourneyController extends Controller
         if ($request->leaved_date == null) {
             $model->leaved_date = $model->arrived_date;
         } else {
-            $model->leaved_date = $request->leaved_date;
+            $leavedDate = strtotime($request->leaved_date);
+            if ($startDate <= $leavedDate && $leavedDate <= $endDate) {
+                $model->leaved_date = $request->leaved_date;
+            } else {
+                $model->leaved_date = $list->end_date;
+            }
         }
 
         $model->arrived_time = $request->arrived_time;
@@ -147,7 +163,9 @@ class JourneyController extends Controller
         $model->jmemo = $request->jmemo;
         $model->jreview = $request->jreview;
         $model->jrate = $request->jrate;
-        if ($request->jchecked != null) {
+        if(!isset($request->jchecked)){
+            $model->jchecked = "0";
+        }else{
             $model->jchecked = $request->jchecked;
         }
 
