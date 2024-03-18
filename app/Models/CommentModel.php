@@ -52,6 +52,17 @@ class CommentModel extends Model
             "photo" => $item["userdata"]["photo"],
         ];
     }
+    static public function find_by_api_formation($item, $photo) {
+        return [
+            "cid" => $item["cid"],
+            "uid" => $item["uid"],
+            "pid" => $item["pid"],
+            "comment" => $item["comment"],
+            "rate" => $item["rate"],
+            "created_at" => $item["created_at"],
+            "photo" => $photo,
+        ];
+    }
     public function find_by_user($uid) {
         // Get user
         $user = User::find($uid);
@@ -62,15 +73,7 @@ class CommentModel extends Model
             // Retrive datas
             $result = array();
             foreach ($data as $item) {
-                $result[] = [
-                    "cid" => $item["cid"],
-                    "pid" => $item["pid"],
-                    "uid" => $uid,
-                    "comment" => $item["comment"],
-                    "rate" => $item["rate"],
-                    "created_at" => $item["created_at"],
-                    "photo" => $photo,
-                ];
+                $result[] = $this->find_by_api_formation($item, $photo);
             }
             return $result;
         } catch(\Exception $error) {
@@ -86,15 +89,7 @@ class CommentModel extends Model
             foreach ($data as $item) {
                 $user = User::find($item["uid"]);
                 $photo = $user->photo;
-                $result[] = [
-                    "cid" => $item["cid"],
-                    "pid" => $item["pid"],
-                    "uid" => $item["uid"],
-                    "comment" => $item["comment"],
-                    "rate" => $item["rate"],
-                    "created_at" => $item["created_at"],
-                    "photo" => $photo,
-                ];
+                $result[] = $this->find_by_api_formation($item, $photo);
             }
             return $result;
         } catch(\Exception $error) {
