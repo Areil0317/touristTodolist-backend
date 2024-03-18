@@ -53,15 +53,15 @@ class CommentModel extends Model
             $result[$key]["created_at"] = $data[$key]["created_at"];
             $result[$key]["pid"] = $data[$key]["pid"];
             $result[$key]["cid"] = $data[$key]["cid"];
-            $data[$key]["photo"] = $photo;
+            $result[$key]["photo"] = $photo;
         }
-        return $data;
+        return $result;
     }
     public function find_by_user($uid) {
         try {
             $sql = $this->where("uid", $uid)->get();
             $result = $this->get_fbu_response_data(
-                $sql->select("cid", "comment", "rate", "created_at", "pid")->toArray(),
+                $sql->toArray(),
                 $uid
             );
             return $result;
