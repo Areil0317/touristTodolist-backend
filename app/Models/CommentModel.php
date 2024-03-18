@@ -48,11 +48,15 @@ class CommentModel extends Model
         // Array
         $result = array();
         foreach ($data as $key => $item) {
+            // IDs
+            $result[$key]["cid"] = $data[$key]["cid"];
+            $result[$key]["pid"] = $data[$key]["pid"];
+            $result[$key]["uid"] = $data[$key]["uid"];
+            // Contents
             $result[$key]["comment"] = $data[$key]["comment"];
             $result[$key]["rate"] = $data[$key]["rate"];
+            // Metadata
             $result[$key]["created_at"] = $data[$key]["created_at"];
-            $result[$key]["pid"] = $data[$key]["pid"];
-            $result[$key]["cid"] = $data[$key]["cid"];
             $result[$key]["photo"] = $photo;
         }
         return $result;
@@ -75,9 +79,14 @@ class CommentModel extends Model
         foreach ($data as $key => $item) {
             $user = User::find($data[$key]["uid"]);
             $photo = $user->photo;
+            // IDs
             $result[$key]["cid"] = $data[$key]["cid"];
+            $result[$key]["pid"] = $data[$key]["pid"];
+            $result[$key]["uid"] = $data[$key]["uid"];
+            // Contents
             $result[$key]["comment"] = $data[$key]["comment"];
             $result[$key]["rate"] = $data[$key]["rate"];
+            // Metadata
             $result[$key]["created_at"] = $data[$key]["created_at"];
             $result[$key]["photo"] = $photo;
         }
@@ -90,9 +99,7 @@ class CommentModel extends Model
             // var_dump(  
             //     $this->get_fbp_response_data
             // );
-            return $this->get_fbp_response_data(
-                $result->select("cid", "comment", "rate", "created_at", "uid")->toArray()
-            );
+            return $this->get_fbp_response_data( $result->toArray() );
         } catch(\Exception $error) {
             return $error;
         }
