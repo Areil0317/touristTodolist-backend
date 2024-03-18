@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\CommentModel;
+use Illuminate\Support\Facades\Auth;
 
 class Comments extends Controller
 {
@@ -40,14 +41,14 @@ class Comments extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            "uid" => "required",
             "pid" => "required",
             "comment" => "required|string|max:150",
             "rate" => "required|numeric|between:1,10",
         ]);
         if( $validated ) {
+            $user = Auth::user();
             $comment = CommentModel::create([
-                "uid" => $validated["uid"],
+                "uid" => $user->id,
                 "pid" => $validated["pid"],
                 "comment" => $validated["comment"],
                 "rate" => $validated["rate"],
@@ -89,6 +90,14 @@ class Comments extends Controller
     }
 
     /**
+     * Check if input user is legal user.
+     */
+    private function user_modification_legal($comment_uid) {
+        $user = Auth::user();
+        return $user->id == $comment_uid;
+    }
+
+    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
@@ -97,6 +106,10 @@ class Comments extends Controller
             return response(["result" => "Parameter not compeleted"], 400);
         }
         $comment = CommentModel::find($id);
+        if( $this->user_modification_legal($comment->uid) == false ) {
+            return response(["result" => "Not correct user"], 401);
+        }
+        // Set data
         $comment->comment = isset($request->comment) ? $request->comment : $comment->comment;
         $comment->rate = isset($request->rate) ? $request->rate : $comment->rate;
         // Save progress
@@ -119,6 +132,10 @@ class Comments extends Controller
     public function destroy(string $id)
     {
         $comment = CommentModel::find($id);
+        if( $this->user_modification_legal($comment->uid) == false ) {
+            return response(["result" => "Not correct user"], 401);
+        }
+        // Progress
         $saved = $comment-remove();
         if( $saved ) {
             return response(["message" => "Success"], 200);
