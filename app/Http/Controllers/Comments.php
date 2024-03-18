@@ -19,6 +19,14 @@ class Comments extends Controller
         ]);
     }
 
+    private function index_comment_formation($data) {
+        $result = array();
+        foreach( $data as $item ) {
+            $result[] = CommentModel::api_item_formation($item);
+        }
+        return $result;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -26,8 +34,8 @@ class Comments extends Controller
     {
         $comment = CommentModel::with("userdata")->get();
         return [
-            "message" => "Hello comment",
-            "result" => $comment,
+            "message" => "Success",
+            "result" => $this->index_comment_formation($comment),
         ];
     }
 
@@ -81,7 +89,10 @@ class Comments extends Controller
         $comment = CommentModel::with("userdata")->find($id);
         $histroy = isset($comment) ? $comment->comment_histroy() : [];
         $code = isset($comment) ? 200 : 404;
-        return response([ "result" => $comment, "histroy" => $histroy, ], $code);
+        return response([
+            "result" => CommentModel::api_item_formation($comment),
+            "histroy" => $histroy,
+        ], $code);
     }
 
     /**

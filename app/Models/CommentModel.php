@@ -40,7 +40,18 @@ class CommentModel extends Model
         return ["cid"];
     }
 
-    // Custom API props
+    // API formation
+    static public function api_item_formation($item) {
+        return [
+            "cid" => $item["cid"],
+            "uid" => $item["uid"],
+            "pid" => $item["pid"],
+            "comment" => $item["comment"],
+            "rate" => $item["rate"],
+            "created_at" => $item["created_at"],
+            "photo" => $item["userdata"]["photo"],
+        ];
+    }
     public function find_by_user($uid) {
         // Get user
         $user = User::find($uid);
