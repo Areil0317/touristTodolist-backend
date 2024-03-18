@@ -41,19 +41,58 @@ class CommentModel extends Model
     }
 
     // Custom API props
+    private function get_fbu_response_data($data, $uid) {
+        // Get user
+        $user = User::find($uid);
+        $photo = $user->photo;
+        // Array
+        $result = array();
+        foreach ($data as $key => $item) {
+            $result[$key]["comment"] = $data[$key]["comment"];
+            $result[$key]["rate"] = $data[$key]["rate"];
+            $result[$key]["created_at"] = $data[$key]["created_at"];
+            $result[$key]["pid"] = $data[$key]["pid"];
+            $result[$key]["cid"] = $data[$key]["cid"];
+            $data[$key]["photo"] = $photo;
+        }
+        return $data;
+    }
     public function find_by_user($uid) {
         try {
-            $result = $this->where("uid", $uid)->get();
+            $sql = $this->where("uid", $uid)->get();
+            $result = $this->get_fbu_response_data(
+                $sql->select("cid", "comment", "rate", "created_at", "pid")->toArray(),
+                $uid
+            );
             return $result;
         } catch(\Exception $error) {
             return $error;
         }
     }
 
+    private function get_fbp_response_data($data) {
+        $result = array();
+        foreach ($data as $key => $item) {
+            $user = User::find($data[$key]["uid"]);
+            $photo = $user->photo;
+            $result[$key]["cid"] = $data[$key]["cid"];
+            $result[$key]["comment"] = $data[$key]["comment"];
+            $result[$key]["rate"] = $data[$key]["rate"];
+            $result[$key]["created_at"] = $data[$key]["created_at"];
+            $result[$key]["photo"] = $photo;
+        }
+        return $result;
+    }
+
     public function find_by_project($pid) {
         try {
             $result = $this->where("pid", $pid)->get();
-            return $result;
+            // var_dump(  
+            //     $this->get_fbp_response_data
+            // );
+            return $this->get_fbp_response_data(
+                $result->select("cid", "comment", "rate", "created_at", "uid")->toArray()
+            );
         } catch(\Exception $error) {
             return $error;
         }
