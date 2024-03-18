@@ -24,7 +24,7 @@ class Comments extends Controller
      */
     public function index()
     {
-        $comment = CommentModel::get();
+        $comment = CommentModel::with("userdata")->get();
         return [
             "message" => "Hello comment",
             "result" => $comment,
@@ -78,7 +78,7 @@ class Comments extends Controller
      */
     public function show(string $id)
     {
-        $comment = CommentModel::find($id);
+        $comment = CommentModel::with("userdata")->find($id);
         $histroy = isset($comment) ? $comment->comment_histroy() : [];
         $code = isset($comment) ? 200 : 404;
         return response([ "result" => $comment, "histroy" => $histroy, ], $code);

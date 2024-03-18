@@ -40,9 +40,10 @@ class CommentModel extends Model
         return ["cid"];
     }
 
+    // Custom API props
     public function find_by_user($uid) {
         try {
-            $result = DB::table("comments")->where("uid", $uid)->get();
+            $result = $this->where("uid", $uid)->get();
             return $result;
         } catch(\Exception $error) {
             return $error;
@@ -51,16 +52,11 @@ class CommentModel extends Model
 
     public function find_by_project($pid) {
         try {
-            $result = DB::table("comments")->where("pid", $pid)->get();
+            $result = $this->where("pid", $pid)->get();
             return $result;
         } catch(\Exception $error) {
             return $error;
         }
-    }
-
-    public function comment_histroy_source(): HasMany
-    {
-        return $this->hasMany(CommentChangelog::class, "cid");
     }
 
     /**
@@ -69,5 +65,28 @@ class CommentModel extends Model
     public function comment_histroy()
     {
         return $this->comment_histroy_source()->select("before", "after")->get();
+    }
+
+    // API prop metadatas
+    /**
+     * Get the user's metadata.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, "uid", "id");
+    }
+
+    /**
+     * Get the commentlog's metadata.
+     */
+    public function comment_histroy_source(): HasMany
+    {
+        return $this->hasMany(CommentChangelog::class, "cid");
+    }
+
+    public function userdata()
+    {
+        $source = $this->user()->select("id", "name", "email", "photo");
+        return $source;
     }
 }
