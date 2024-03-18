@@ -116,29 +116,24 @@ class Comments extends Controller
      */
     public function update(Request $request, string $id)
     {
-        if( !isset($request->comment) && !isset($request->rate) ) {
-            return response(["result" => "Parameter not compeleted"], 400);
-        }
         $comment = CommentModel::find($id);
         if( $this->user_modification_legal($comment->uid) == false ) {
             return response(["result" => "Not correct user"], 401);
+        }
+        if( !isset($request->comment) && !isset($request->rate) ) {
+            return response(["result" => "Parameter not compeleted"], 400);
         }
         // Set data
         $comment->comment = isset($request->comment) ? $request->comment : $comment->comment;
         $comment->rate = isset($request->rate) ? $request->rate : $comment->rate;
         // Save progress
         $saved = $comment->save();
-        if( $saved ) {
-            return response([
-                "message" => "Success",
-                "result" => $comment,
-            ], 200);
-        } else {
-            return response([
-                "message" => "NOT success",
-                "result" => $comment,
-            ], 400);
-        }
+        $message = $saved ? "Success" : "NOT success";
+        $code = $saved ? 200 : 400;
+        return response([
+            "message" => $message,
+            "result" => $comment,
+        ], $code);
     }
 
     /**
