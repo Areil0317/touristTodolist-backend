@@ -41,62 +41,51 @@ class CommentModel extends Model
     }
 
     // Custom API props
-    private function get_fbu_response_data($data, $uid) {
+    public function find_by_user($uid) {
         // Get user
         $user = User::find($uid);
         $photo = $user->photo;
-        // Array
-        $result = array();
-        foreach ($data as $key => $item) {
-            // IDs
-            $result[$key]["cid"] = $data[$key]["cid"];
-            $result[$key]["pid"] = $data[$key]["pid"];
-            $result[$key]["uid"] = $data[$key]["uid"];
-            // Contents
-            $result[$key]["comment"] = $data[$key]["comment"];
-            $result[$key]["rate"] = $data[$key]["rate"];
-            // Metadata
-            $result[$key]["created_at"] = $data[$key]["created_at"];
-            $result[$key]["photo"] = $photo;
-        }
-        return $result;
-    }
-    public function find_by_user($uid) {
         try {
             $sql = $this->where("uid", $uid)->get();
-            $result = $this->get_fbu_response_data(
-                $sql->toArray(),
-                $uid
-            );
+            $data = $sql->toArray();
+            // Retrive datas
+            $result = array();
+            foreach ($data as $item) {
+                $result[] = [
+                    "cid" => $item["cid"],
+                    "pid" => $item["pid"],
+                    "uid" => $uid,
+                    "comment" => $item["comment"],
+                    "rate" => $item["rate"],
+                    "created_at" => $item["created_at"],
+                    "photo" => $photo,
+                ];
+            }
             return $result;
         } catch(\Exception $error) {
             return $error;
         }
     }
 
-    private function get_fbp_response_data($data) {
-        $result = array();
-        foreach ($data as $key => $item) {
-            $user = User::find($data[$key]["uid"]);
-            $photo = $user->photo;
-            // IDs
-            $result[$key]["cid"] = $data[$key]["cid"];
-            $result[$key]["pid"] = $data[$key]["pid"];
-            $result[$key]["uid"] = $data[$key]["uid"];
-            // Contents
-            $result[$key]["comment"] = $data[$key]["comment"];
-            $result[$key]["rate"] = $data[$key]["rate"];
-            // Metadata
-            $result[$key]["created_at"] = $data[$key]["created_at"];
-            $result[$key]["photo"] = $photo;
-        }
-        return $result;
-    }
-
     public function find_by_project($pid) {
         try {
-            $result = $this->where("pid", $pid)->get();
-            return $this->get_fbp_response_data( $result->toArray() );
+            $sql = $this->where("pid", $pid)->get();
+            $data = $sql->toArray();
+            $result = array();
+            foreach ($data as $item) {
+                $user = User::find($item["uid"]);
+                $photo = $user->photo;
+                $result[] = [
+                    "cid" => $item["cid"],
+                    "pid" => $item["pid"],
+                    "uid" => $item["uid"],
+                    "comment" => $item["comment"],
+                    "rate" => $item["rate"],
+                    "created_at" => $item["created_at"],
+                    "photo" => $photo,
+                ];
+            }
+            return $result;
         } catch(\Exception $error) {
             return $error;
         }
