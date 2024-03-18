@@ -19,23 +19,19 @@ class Comments extends Controller
         ]);
     }
 
-    private function index_comment_formation($data) {
-        $result = array();
-        foreach( $data as $item ) {
-            $result[] = CommentModel::api_item_formation($item);
-        }
-        return $result;
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $comment = CommentModel::with("userdata")->get();
+        $result = array();
+        foreach( $comment as $item ) {
+            $result[] = CommentModel::api_item_formation($item);
+        }
         return [
             "message" => "Success",
-            "result" => $this->index_comment_formation($comment),
+            "result" => $result,
         ];
     }
 
