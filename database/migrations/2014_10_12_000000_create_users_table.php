@@ -27,8 +27,8 @@ return new class extends Migration {
             $table->foreignId('uid')->references('id')->on('users');
             $table->string('title');
             $table->timestamps();
-            $table->dateTime('start_date');
-            $table->dateTime('end_date');
+            $table->date('start_date');
+            $table->date('end_date');
         });
 
         Schema::create('prepare', function (Blueprint $table) {
@@ -51,21 +51,21 @@ return new class extends Migration {
 
         Schema::create('attractions', function (Blueprint $table) {
             $table->id('aid');
-            $table->string('aname');
+            $table->string('aname')->unique();
         });
 
         Schema::create('journey', function (Blueprint $table) {
             $table->id('jid');
             $table->foreignId('tlid')->references('tlid')->on('touristlist');
             $table->foreignId('aid')->references('aid')->on('attractions');
-            $table->string('jname');
-            $table->dateTime('arrived_date');
-            $table->dateTime('leaved_date');
-            $table->time('arrived_time');
-            $table->time('leaved_time');
-            $table->string('jmemo', 10000);
-            $table->string('jreview', 150);
-            $table->string('jrate', 3);
+            // $table->string('jname');
+            $table->date('arrived_date');
+            $table->date('leaved_date');
+            $table->time('arrived_time')->nullable();
+            $table->time('leaved_time')->nullable();
+            $table->string('jmemo', 10000)->nullable();
+            $table->string('jreview', 150)->nullable();
+            $table->string('jrate', 3)->nullable();
             $table->string('jchecked', 2);
         });
 
@@ -78,8 +78,8 @@ return new class extends Migration {
         Schema::create('jbudget', function (Blueprint $table) {
             $table->id('jbid');
             $table->foreignId('jid')->references('jid')->on('journey');
-            $table->string('jbname', 150);
-            $table->string('jbamount', 11);
+            $table->string('jbname', 150)->nullable();
+            $table->string('jbamount', 11)->nullable();
         });
 
         Schema::create('project', function (Blueprint $table) {
@@ -92,14 +92,14 @@ return new class extends Migration {
             $table->id('jpid');
             $table->foreignId('jid')->references('jid')->on('journey');
             $table->foreignId('pid')->references('pid')->on('project');
-            $table->string('jpname');
-            $table->dateTime('jpstart_date');
-            $table->dateTime('jpend_date');
-            $table->time('jpstart_time');
-            $table->time('jpend_time');
-            $table->string('jpmemo', 10000);
-            $table->string('jpreview', 150);
-            $table->string('jprate', 3);
+            // $table->string('jpname');
+            $table->date('jpstart_date');
+            $table->date('jpend_date');
+            $table->time('jpstart_time')->nullable();
+            $table->time('jpend_time')->nullable();
+            $table->string('jpmemo', 10000)->nullable();
+            $table->string('jpreview', 150)->nullable();
+            $table->string('jprate', 3)->nullable();
             $table->string('jpchecked', 2);
         });
 
