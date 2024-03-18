@@ -83,10 +83,12 @@ class Comments extends Controller
     public function show(string $id)
     {
         $comment = CommentModel::with("userdata")->find($id);
+        $result = CommentModel::api_item_formation($comment);
         $histroy = isset($comment) ? $comment->comment_histroy() : [];
         $code = isset($comment) ? 200 : 404;
         return response([
-            "result" => CommentModel::api_item_formation($comment),
+            "message" => "Success",
+            "result" => $result,
             "histroy" => $histroy,
         ], $code);
     }
@@ -133,7 +135,8 @@ class Comments extends Controller
             ], 200);
         } else {
             return response([
-                "result" => "NOT success"
+                "message" => "NOT success",
+                "result" => $comment,
             ], 400);
         }
     }
@@ -152,7 +155,7 @@ class Comments extends Controller
         if( $saved ) {
             return response(["message" => "Success"], 200);
         } else {
-            return response(["result" => "NOT success"], 400);
+            return response(["message" => "NOT success"], 400);
         }
     }
 
