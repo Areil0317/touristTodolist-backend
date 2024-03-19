@@ -163,6 +163,9 @@ class Comments extends Controller
         ], 400);
     }
 
+    /**
+     * Get the user's comments by given token.
+     */
     public function show_by_user_by_token() {
         $user = Auth::user();
         $uid = $user->id;
@@ -174,7 +177,7 @@ class Comments extends Controller
     }
 
     /**
-     * Get the user's comments.
+     * Get the user's comments by given $uid.
      */
     public function show_by_user($uid) {
         $model = new CommentModel();
