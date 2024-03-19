@@ -124,7 +124,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::resource("/comment", Comments::class);
 
 // Special comment APIs
-Route::get("/user-comment", [Comments::class, "no_id_given"]);
+Route::get("/user-comment", [Comments::class, "show_by_user_by_token"]);
 Route::get("/user-comment/{uid}", [Comments::class, "show_by_user"]);
 Route::get("/project-comment", [Comments::class, "no_id_given"]);
 Route::get("/project-comment/{pid}", [Comments::class, "show_by_pid"]);
