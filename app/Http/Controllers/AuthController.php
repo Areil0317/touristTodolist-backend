@@ -58,10 +58,9 @@ class AuthController extends Controller
         ;
     }
 
-    // 在AuthController中添加登出方法
+    //用戶登出
     public function logout(Request $request)
     {
-        // 假設你使用 Laravel Sanctum
         $request->user()->currentAccessToken()->delete();
 
         return response()->json(['message' => 'Successfully logged out']);
