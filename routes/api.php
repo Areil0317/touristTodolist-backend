@@ -119,6 +119,12 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::post('/update-avatar', [UserController::class, 'updateAvatar'])->name('profile.update-avatar');
+// Route::middleware('auth:api')->get('/testuser', function (Request $request) {
+//     return $request->user();
+// });
+
+
 
 // Comment APIs
 Route::resource("/comment", Comments::class);

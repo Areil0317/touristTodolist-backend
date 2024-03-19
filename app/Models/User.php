@@ -21,7 +21,22 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'photo',
+        'cellphone'
     ];
+
+    public function getPhotoUrlAttribute()
+    {
+        if ($this->photo) {
+            // 本地儲存
+            return asset('storage/' . $this->photo);
+
+        }
+
+        // 可以返回一個預設圖片的URL
+        return "https://cdn.iconscout.com/icon/free/png-256/free-avatar-380-456332.png";
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.
