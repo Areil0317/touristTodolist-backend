@@ -26,7 +26,13 @@ class JourneyController extends Controller
             return response()->json(['message' => 'Data not found'], 404);
         }
 
-        $aname = $request->aname;
+        if($request->aname == null){
+            $aname = "請輸入行程名稱";
+        }else{
+            $aname = $request->aname;
+        }
+
+
         $attraction = AttractionModel::firstOrCreate(['aname' => $aname]);
 
         $model->tlid = $tlid;
@@ -109,7 +115,12 @@ class JourneyController extends Controller
             return response()->json(['message' => 'Data not found'], 404);
         }
 
-        $aname = $request->aname;
+        if($request->aname == null){
+            $aname = "請輸入行程名稱";
+        }else{
+            $aname = $request->aname;
+        }
+
         $attraction = AttractionModel::firstOrCreate(['aname' => $aname]);
         $model->aid = $attraction->aid;
 

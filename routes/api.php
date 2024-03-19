@@ -50,12 +50,30 @@ Route::post('/POST/updatejbudget', [JourneyController::class, "updateJbudget_pos
 Route::post('/POST/selectjbudget', [JourneyController::class, "selectJbudget_post"]);
 Route::post('/POST/addjimage', [JourneyController::class, "addJimage_post"]);
 Route::post('/POST/deletejimage', [JourneyController::class, "deleteJimage_post"]);
-Route::post('/POST/updatejimage', [JourneyController::class, "updateJimage_post"]);
 Route::post('/POST/selectjimage', [JourneyController::class, "selectJimage_post"]);
 //
 
 // JourneyProject APIs
 Route::post('/POST/addjourneyproject', [JourneyProjectController::class, "addJourneyProject_post"]);
+Route::post('/POST/deletejourneyproject', [JourneyProjectController::class, "deleteJourneyProject_post"]);
+Route::post('/POST/updatejourneyproject', [JourneyProjectController::class, "updateJourneyProject_post"]);
+Route::post('/POST/selectjourneyproject', [JourneyProjectController::class, "selectJourneyProject_post"]);
+
+Route::post('/POST/addjpbudget', [JourneyProjectController::class, "addJpbudget_post"]);
+Route::post('/POST/deletejpbudget', [JourneyProjectController::class, "deleteJpbudget_post"]);
+Route::post('/POST/updatejpbudget', [JourneyProjectController::class, "updateJpbudget_post"]);
+Route::post('/POST/selectjpbudget', [JourneyProjectController::class, "selectJpbudget_post"]);
+
+Route::post('/POST/addjpimage', [JourneyProjectController::class, "addJpimage_post"]);
+Route::post('/POST/deletejpimage', [JourneyProjectController::class, "deleteJpimage_post"]);
+Route::post('/POST/selectjpimage', [JourneyProjectController::class, "selectJpimage_post"]);
+//
+
+// Search APIs
+Route::post('/POST/searchattraction', [SearchController::class, "selectAttraction_post"]);
+Route::post('/POST/searchproject', [SearchController::class, "selectProject_post"]);
+
+
 //
 
 
