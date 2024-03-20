@@ -92,7 +92,7 @@ Route::post('/addcost', function (Request $request) {
 });
 
 // Showlist APIs
-Route::get("/showlist/{email}", [UserApis::class, "showlist_get"]);
+Route::post("/POST/userrelatedids", [UserApis::class, "userRelatedIds"]);
 Route::post("/showlist", [UserApis::class, "showlist"]);
 
 Route::post('/update', function (Request $request) {

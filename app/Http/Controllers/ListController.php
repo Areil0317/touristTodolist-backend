@@ -13,7 +13,7 @@ class ListController extends Controller
     {
 
         $model = new ListModel;
-        $model->uid = $request->uid;
+        $model->uid = $request->id;
         $model->title = $request->title;
 
         if ($request->start_date == null) {
