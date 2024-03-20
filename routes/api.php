@@ -84,6 +84,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::post('/update-avatar', [UserController::class, 'updateAvatar'])->name('profile.update-avatar');
+Route::middleware('auth:sanctum')->put('/update', [UserController::class, 'update']);
+
 
 // Comment APIs
 Route::resource("/comment", Comments::class);
