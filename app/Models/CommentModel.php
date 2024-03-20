@@ -65,7 +65,7 @@ class CommentModel extends Model
     public function find_by_user($uid) {
         // Get user
         $user = User::find($uid);
-        $photo = $user->photo;
+        $photo = $user->getPhotoUrlAttribute();
         try {
             $sql = $this->where("uid", $uid)->get();
             $data = $sql->toArray();
@@ -87,7 +87,7 @@ class CommentModel extends Model
             $result = array();
             foreach ($data as $item) {
                 $user = User::find($item["uid"]);
-                $photo = $user->photo;
+                $photo = $user->getPhotoUrlAttribute();
                 $result[] = $this->find_by_api_formation($item, $photo);
             }
             return $result;
