@@ -87,8 +87,6 @@ Route::post('/update-avatar', [UserController::class, 'updateAvatar'])->name('pr
 
 // Comment APIs
 Route::resource("/comment", Comments::class);
-
-// Special comment APIs
 Route::get("/comment/{cid}/changelog", [CommentsBySpecialCall::class, "show_comment_changelog"]);
 Route::get("/user-comment", [CommentsBySpecialCall::class, "show_by_user_by_token"]);
 Route::get("/user-comment/{uid}", [CommentsBySpecialCall::class, "show_by_user"]);
