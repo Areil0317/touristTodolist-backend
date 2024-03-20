@@ -110,6 +110,7 @@ Route::post('/update-avatar', [UserController::class, 'updateAvatar'])->name('pr
 Route::resource("/comment", Comments::class);
 
 // Special comment APIs
+Route::get("/comment/{cid}/changelog", [CommentsBySpecialCall::class, "show_comment_changelog"]);
 Route::get("/user-comment", [CommentsBySpecialCall::class, "show_by_user_by_token"]);
 Route::get("/user-comment/{uid}", [CommentsBySpecialCall::class, "show_by_user"]);
 Route::get("/project-comment", [CommentsBySpecialCall::class, "index"]);
@@ -118,12 +119,10 @@ Route::get("/project-comment/{pid}", [CommentsBySpecialCall::class, "show_by_pid
 // Attraction APIs
 Route::resource("/attraction", Attractions::class);
 Route::get("/attraction-name/{aname}", [Attractions::class, "show_by_name"]);
-// Route::get("/attraction-aname/{aname}", [Attractions::class, "show_by_name"]);
 
 // Project APIs
 Route::resource("/project", Projects::class);
 Route::get("/project-name/{aname}", [Projects::class, "show_by_attraction"]);
-// Route::get("/project-aname/{aname}", [Projects::class, "show_by_attraction"]);
 
 // Other APIs
 Route::post('/update', function (Request $request) {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\CommentModel;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CommentsBySpecialCall extends Controller
 {
@@ -58,5 +59,15 @@ class CommentsBySpecialCall extends Controller
             "uid" => $uid,
             "result" => $data["result"]
         ];
+    }
+
+    public function show_comment_changelog($cid) {
+        $check = DB::table("comment_changelogs")->where("cid", $cid)->get();
+        $check_empty = count($check) > 0;
+        $code = $check_empty ? 200 : 404;
+        return response([
+            "cid" => $cid,
+            "result" => $check
+        ], $code);
     }
 }
