@@ -25,12 +25,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/', function () {
-    return response(['message' => 'This is a test.']);
+    return response([
+        'message' => 'Welcome to the project API!'
+    ], 200);
 });
 Route::get('/test', function () {
-    return response(['message' => 'This is a test.']);
+    return response([
+        'message' => 'You called the API successfully.'
+    ], 200);
 });
-
 
 // List APIs
 Route::post('/POST/addlist', [ListController::class, "addList_post"]);
@@ -51,7 +54,6 @@ Route::post('/POST/selectjbudget', [JourneyController::class, "selectJbudget_pos
 Route::post('/POST/addjimage', [JourneyController::class, "addJimage_post"]);
 Route::post('/POST/deletejimage', [JourneyController::class, "deleteJimage_post"]);
 Route::post('/POST/selectjimage', [JourneyController::class, "selectJimage_post"]);
-//
 
 // JourneyProject APIs
 Route::post('/POST/addjourneyproject', [JourneyProjectController::class, "addJourneyProject_post"]);
@@ -59,24 +61,11 @@ Route::post('/POST/deletejourneyproject', [JourneyProjectController::class, "del
 Route::post('/POST/updatejourneyproject', [JourneyProjectController::class, "updateJourneyProject_post"]);
 Route::post('/POST/selectjourneyproject', [JourneyProjectController::class, "selectJourneyProject_post"]);
 
+// Budget APIs
 Route::post('/POST/addjpbudget', [JourneyProjectController::class, "addJpbudget_post"]);
 Route::post('/POST/deletejpbudget', [JourneyProjectController::class, "deleteJpbudget_post"]);
 Route::post('/POST/updatejpbudget', [JourneyProjectController::class, "updateJpbudget_post"]);
 Route::post('/POST/selectjpbudget', [JourneyProjectController::class, "selectJpbudget_post"]);
-
-Route::post('/POST/addjpimage', [JourneyProjectController::class, "addJpimage_post"]);
-Route::post('/POST/deletejpimage', [JourneyProjectController::class, "deleteJpimage_post"]);
-Route::post('/POST/selectjpimage', [JourneyProjectController::class, "selectJpimage_post"]);
-//
-
-// Search APIs
-Route::post('/POST/searchattraction', [SearchController::class, "selectAttraction_post"]);
-Route::post('/POST/searchproject', [SearchController::class, "selectProject_post"]);
-
-
-//
-
-
 Route::post('/addcost', function (Request $request) {
     $title = $request->title;
     $cost = $request->cost;
@@ -91,22 +80,18 @@ Route::post('/addcost', function (Request $request) {
     }
 });
 
+// Image APIs
+Route::post('/POST/addjpimage', [JourneyProjectController::class, "addJpimage_post"]);
+Route::post('/POST/deletejpimage', [JourneyProjectController::class, "deleteJpimage_post"]);
+Route::post('/POST/selectjpimage', [JourneyProjectController::class, "selectJpimage_post"]);
+
+// Search APIs
+Route::post('/POST/searchattraction', [SearchController::class, "selectAttraction_post"]);
+Route::post('/POST/searchproject', [SearchController::class, "selectProject_post"]);
+
 // Showlist APIs
 Route::get("/showlist/{email}", [UserApis::class, "showlist_get"]);
 Route::post("/showlist", [UserApis::class, "showlist"]);
-
-Route::post('/update', function (Request $request) {
-
-    $name = $request->name;
-    $password = $request->password;
-    $email = $request->email;
-
-    DB::update("update users set password = ? where email = ?", [$password, $email]);
-    DB::update("update users set name = ? where email = ?", [$name, $email]);
-
-    echo "更改成功";
-
-});
 
 // User APIs
 Route::get('/get', function (Request $request) {
@@ -120,11 +105,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::post('/update-avatar', [UserController::class, 'updateAvatar'])->name('profile.update-avatar');
-// Route::middleware('auth:api')->get('/testuser', function (Request $request) {
-//     return $request->user();
-// });
-
-
 
 // Comment APIs
 Route::resource("/comment", Comments::class);
@@ -135,12 +115,25 @@ Route::get("/user-comment/{uid}", [Comments::class, "show_by_user"]);
 Route::get("/project-comment", [Comments::class, "no_id_given"]);
 Route::get("/project-comment/{pid}", [Comments::class, "show_by_pid"]);
 
-// Attractions
+// Attraction APIs
 Route::resource("/attraction", Attractions::class);
 Route::get("/attraction-name/{aname}", [Attractions::class, "show_by_name"]);
 // Route::get("/attraction-aname/{aname}", [Attractions::class, "show_by_name"]);
 
-// Projects
+// Project APIs
 Route::resource("/project", Projects::class);
 Route::get("/project-name/{aname}", [Projects::class, "show_by_attraction"]);
 // Route::get("/project-aname/{aname}", [Projects::class, "show_by_attraction"]);
+
+// Other APIs
+Route::post('/update', function (Request $request) {
+    $name = $request->name;
+    $password = $request->password;
+    $email = $request->email;
+
+    DB::update("update users set password = ? where email = ?", [$password, $email]);
+    DB::update("update users set name = ? where email = ?", [$name, $email]);
+
+    echo "更改成功";
+
+});
