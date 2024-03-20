@@ -13,9 +13,6 @@ class Comments extends Controller
         $this->middleware("auth:sanctum")->except([
             "index",
             "show",
-            "no_id_given",
-            "show_by_user",
-            "show_by_pid",
         ]);
     }
 
@@ -152,51 +149,5 @@ class Comments extends Controller
         } else {
             return response(["message" => "NOT success"], 400);
         }
-    }
-
-    /**
-     * No ID given.
-     */
-    public function no_id_given() {
-        return response([
-            "message" => "Please provide ID for querying."
-        ], 400);
-    }
-
-    /**
-     * Get the user's comments by given token.
-     */
-    public function show_by_user_by_token() {
-        $user = Auth::user();
-        $uid = $user->id;
-        $data = $this->show_by_user($uid);
-        return [
-            "uid" => $uid,
-            "result" => $data["result"]
-        ];
-    }
-
-    /**
-     * Get the user's comments by given $uid.
-     */
-    public function show_by_user($uid) {
-        $model = new CommentModel();
-        $sql = $model->find_by_user($uid);
-        return [
-            "uid" => $uid,
-            "result" => $sql
-        ];
-    }
-
-    /**
-     * Get the thread's comments.
-     */
-    public function show_by_pid($pid) {
-        $model = new CommentModel();
-        $sql = $model->find_by_project($pid);
-        return [
-            "pid" => $pid,
-            "result" => $sql
-        ];
     }
 }

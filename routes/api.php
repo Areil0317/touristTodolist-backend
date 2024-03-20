@@ -110,10 +110,10 @@ Route::post('/update-avatar', [UserController::class, 'updateAvatar'])->name('pr
 Route::resource("/comment", Comments::class);
 
 // Special comment APIs
-Route::get("/user-comment", [Comments::class, "show_by_user_by_token"]);
-Route::get("/user-comment/{uid}", [Comments::class, "show_by_user"]);
-Route::get("/project-comment", [Comments::class, "no_id_given"]);
-Route::get("/project-comment/{pid}", [Comments::class, "show_by_pid"]);
+Route::get("/user-comment", [CommentsBySpecialCall::class, "show_by_user_by_token"]);
+Route::get("/user-comment/{uid}", [CommentsBySpecialCall::class, "show_by_user"]);
+Route::get("/project-comment", [CommentsBySpecialCall::class, "index"]);
+Route::get("/project-comment/{pid}", [CommentsBySpecialCall::class, "show_by_pid"]);
 
 // Attraction APIs
 Route::resource("/attraction", Attractions::class);
