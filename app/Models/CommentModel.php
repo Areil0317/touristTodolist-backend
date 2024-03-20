@@ -85,6 +85,14 @@ class CommentModel extends Model
     }
 
     /**
+     * Get the commentlog's metadata.
+     */
+    public function comment_histroy_source(): HasMany
+    {
+        return $this->hasMany(CommentChangelog::class, "cid");
+    }
+
+    /**
      * Get the comment's changelog.
      */
     public function comment_histroy()
@@ -99,14 +107,6 @@ class CommentModel extends Model
     public function user()
     {
         return $this->belongsTo(User::class, "uid", "id");
-    }
-
-    /**
-     * Get the commentlog's metadata.
-     */
-    public function comment_histroy_source(): HasMany
-    {
-        return $this->hasMany(CommentChangelog::class, "cid");
     }
 
     public function userdata()
