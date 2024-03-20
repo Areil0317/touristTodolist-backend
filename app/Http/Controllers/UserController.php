@@ -25,7 +25,7 @@ class UserController extends Controller
         }
 
         $request->validate([
-            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $path = $request->file('avatar')->store('avatars', 'public');
