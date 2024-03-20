@@ -61,13 +61,17 @@ class CommentsBySpecialCall extends Controller
         ];
     }
 
+    /**
+     * Get the comment's changelog by given $cid.
+     */
     public function show_comment_changelog($cid) {
         $check = DB::table("comment_changelogs")->where("cid", $cid)->get();
-        $check_empty = count($check) > 0;
-        $code = $check_empty ? 200 : 404;
+        $has_logs = count($check) > 0;
+        $message = $has_logs ? "Success" : "No changes";
         return response([
             "cid" => $cid,
-            "result" => $check
-        ], $code);
+            "result" => $check,
+            "message" => $message,
+        ], 200);
     }
 }
