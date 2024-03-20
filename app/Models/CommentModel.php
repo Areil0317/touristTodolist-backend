@@ -80,7 +80,7 @@ class CommentModel extends Model
                 return $this->format_api_response($comment, $photo);
             })->all();
         } catch(\Exception $error) {
-            return $error;
+            return $error->getMessage();
         }
     }
 
