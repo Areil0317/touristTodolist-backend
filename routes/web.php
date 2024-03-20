@@ -24,7 +24,7 @@ Route::get("/", function () {
 Route::get("/avatars/{filename}", function ($filename) {
     $path = storage_path("app/public/avatars/$filename");
     if (!Storage::exists("public/avatars/$filename")) {
-        abort(400);
+        abort(404);
     }
     return response()->file($path);
 })->where("filename", ".*");
