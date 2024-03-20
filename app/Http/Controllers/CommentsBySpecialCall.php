@@ -10,10 +10,8 @@ class CommentsBySpecialCall extends Controller
 {
     public function __construct()
     {
-        $this->middleware("auth:sanctum")->except([
-            "index",
-            "show_by_user",
-            "show_by_pid",
+        $this->middleware("auth:sanctum")->only([
+            "show_by_user_by_token",
         ]);
     }
 
