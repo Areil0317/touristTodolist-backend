@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-
-
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +37,6 @@ Route::post('/POST/addlist', [ListController::class, "addList_post"]);
 Route::post('/POST/deletelist', [ListController::class, "deleteList_post"]);
 Route::post('/POST/updatelist', [ListController::class, "updateList_post"]);
 Route::post('/POST/selectlist', [ListController::class, "selectList_post"]);
-//
 
 // Journey APIs
 Route::post('/POST/addjourney', [JourneyController::class, "addJourney_post"]);
@@ -66,19 +62,6 @@ Route::post('/POST/addjpbudget', [JourneyProjectController::class, "addJpbudget_
 Route::post('/POST/deletejpbudget', [JourneyProjectController::class, "deleteJpbudget_post"]);
 Route::post('/POST/updatejpbudget', [JourneyProjectController::class, "updateJpbudget_post"]);
 Route::post('/POST/selectjpbudget', [JourneyProjectController::class, "selectJpbudget_post"]);
-Route::post('/addcost', function (Request $request) {
-    $title = $request->title;
-    $cost = $request->cost;
-    $tlid = DB::select('select tlid from touristlist where title = ?', [$title]);
-
-    if (!empty ($tlid)) {
-        $tlid = $tlid[0]->tlid;
-        DB::insert('insert into listcost (cost,tlid) VALUES (?,?)', [$cost, $tlid]);
-        echo "OK";
-    } else {
-        echo "list not found";
-    }
-});
 
 // Image APIs
 Route::post('/POST/addjpimage', [JourneyProjectController::class, "addJpimage_post"]);
@@ -94,10 +77,6 @@ Route::get("/showlist/{email}", [UserApis::class, "showlist_get"]);
 Route::post("/showlist", [UserApis::class, "showlist"]);
 
 // User APIs
-Route::get('/get', function (Request $request) {
-    $user = DB::select("select * from users");
-    return response($user)->header("Access-Control-Allow-Origin", "*");
-});
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
@@ -124,14 +103,3 @@ Route::get("/project/{pid}/comments", [CommentsBySpecialCall::class, "show_by_pi
 Route::get("/project-name/{aname}", [Projects::class, "show_by_attraction"]);
 
 // Other APIs
-Route::post('/update', function (Request $request) {
-    $name = $request->name;
-    $password = $request->password;
-    $email = $request->email;
-
-    DB::update("update users set password = ? where email = ?", [$password, $email]);
-    DB::update("update users set name = ? where email = ?", [$name, $email]);
-
-    echo "更改成功";
-
-});
