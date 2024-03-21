@@ -1,4 +1,5 @@
 <?php
+namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Route;
 
@@ -17,14 +18,8 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::get("/", function () {
-    return response([ "message" => "Hello World" ]);
-});
+Route::get("/", [WebRoutes::class, "index"]);
 
-Route::get("/avatars/{filename}", function ($filename) {
-    $path = storage_path("app/public/avatars/$filename");
-    if (!Storage::exists("public/avatars/$filename")) {
-        abort(404);
-    }
-    return response()->file($path);
-})->where("filename", ".*");
+// http://127.0.0.1:8000/storage/avatars/BolaBzjE3xZatSvVd1swgmv4Dc8n6rgFwfGaPYVr.svg
+Route::get("/storage/avatars/{filename}", [WebRoutes::class, "avatars"])->where("filename", ".*");
+Route::get("/avatars/{filename}", [WebRoutes::class, "avatars"])->where("filename", ".*");
