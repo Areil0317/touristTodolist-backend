@@ -143,7 +143,7 @@ class Comments extends Controller
             return response(["result" => "Not correct user"], 401);
         }
         // Progress
-        $saved = $comment->remove();
+        $saved = $comment->delete();
         if( $saved ) {
             return response(["message" => "Success"], 200);
         } else {
