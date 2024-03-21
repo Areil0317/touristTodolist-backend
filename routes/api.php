@@ -69,8 +69,9 @@ Route::post('/POST/deletejpimage', [JourneyProjectController::class, "deleteJpim
 Route::post('/POST/selectjpimage', [JourneyProjectController::class, "selectJpimage_post"]);
 
 // Search APIs
-Route::post('/POST/searchattraction', [SearchController::class, "selectAttraction_post"]);
+Route::post('/POST/searchsimilarattraction', [SearchController::class, "selectSimilarAttraction_post"]);
 Route::post('/POST/searchproject', [SearchController::class, "selectProject_post"]);
+Route::post('/POST/searchattraction', [SearchController::class, "selectAttraction_post"]);
 
 // Showlist APIs
 Route::post("/POST/userrelatedids", [UserApis::class, "userRelatedIds"]);

@@ -187,9 +187,9 @@ class JourneyController extends Controller
 
     public function selectJourney_post(Request $request)
     {
-        $jid = $request->jid;
-        $model = JourneyModel::find($jid);
-
+        $tlid = $request->tlid;
+        $model = JourneyModel::where('tlid', $tlid)->get();
+        
         if (!$model) {
             return response()->json(['message' => 'Data not found'], 404);
         }

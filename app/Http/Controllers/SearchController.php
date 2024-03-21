@@ -9,10 +9,21 @@ use App\Models\ProjectModel;
 
 class SearchController extends Controller
 {
-    public function selectAttraction_post(Request $request)
+    public function selectSimilarAttraction_post(Request $request)
     {
         $aname = $request->aname;
         $model = AttractionModel::where('aname', 'like', '%' . $aname . '%')->get();
+        if (!$model) {
+            return response()->json(['message' => 'Data not found'], 404);
+        }
+
+        return response()->json($model, 200);
+    }
+
+    public function selectAttraction_post(Request $request)
+    {
+        $aid = $request->aid;
+        $model = AttractionModel::find($aid);
         if (!$model) {
             return response()->json(['message' => 'Data not found'], 404);
         }
