@@ -74,7 +74,6 @@ Route::post('/POST/searchproject', [SearchController::class, "selectProject_post
 
 // Showlist APIs
 Route::post("/POST/userrelatedids", [UserApis::class, "userRelatedIds"]);
-Route::post("/showlist", [UserApis::class, "showlist"]);
 
 // User APIs
 Route::post('/register', [AuthController::class, 'register']);
