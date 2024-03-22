@@ -44,8 +44,25 @@ class CommentModel extends Model
      */
     private function format_api_response($comment, $user)
     {
-        $photo = $user->getPhotoUrlAttribute();
-        $username = $user->name;
+        $photo = isset($user) ? $user->getPhotoUrlAttribute() : "";
+        $username = isset($user) ? $user->name : "";
+        return [
+            'cid' => $comment->cid,
+            'uid' => $comment->uid,
+            'pid' => $comment->pid,
+            'username' => $username,
+            'comment' => $comment->comment,
+            'rate' => $comment->rate,
+            'created_at' => $comment->created_at,
+            'photo' => $photo,
+        ];
+    }
+
+    public static function comment_api_item_formation($comment)
+    {
+        $user = $comment["userdata"];
+        $photo = $user["photo"];
+        $username = $user["name"];
         return [
             'cid' => $comment->cid,
             'uid' => $comment->uid,
