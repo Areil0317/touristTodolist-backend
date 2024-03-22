@@ -42,12 +42,15 @@ class CommentModel extends Model
     /**
      * API formation: Format comment data for API response.
      */
-    private function format_api_response($comment, $photo)
+    private function format_api_response($comment, $user)
     {
+        $photo = $user->getPhotoUrlAttribute();
+        $username = $user->name;
         return [
             'cid' => $comment->cid,
             'uid' => $comment->uid,
             'pid' => $comment->pid,
+            'username' => $username,
             'comment' => $comment->comment,
             'rate' => $comment->rate,
             'created_at' => $comment->created_at,
@@ -61,10 +64,9 @@ class CommentModel extends Model
     public function find_by_user($uid) {
         try {
             $user = User::find($uid);
-            $photo = $user->getPhotoUrlAttribute();
             $comments = $this->where("uid", $uid)->get();
-            return $comments->map(function ($comment) use ($photo) {
-                return $this->format_api_response($comment, $photo);
+            return $comments->map(function ($comment) use ($user) {
+                return $this->format_api_response($comment, $user);
             })->all();
         } catch(\Exception $error) {
             return $error->getMessage();
@@ -76,8 +78,7 @@ class CommentModel extends Model
             $comments = $this->where("pid", $pid)->get();
             return $comments->map(function ($comment) {
                 $user = User::find($comment["uid"]);
-                $photo = $user ? $user->getPhotoUrlAttribute() : null;
-                return $this->format_api_response($comment, $photo);
+                return $this->format_api_response($comment, $user);
             })->all();
         } catch(\Exception $error) {
             return $error->getMessage();
