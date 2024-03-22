@@ -31,6 +31,17 @@ class SearchController extends Controller
         return response()->json($model, 200);
     }
 
+    public function selectProjectName_post(Request $request)
+    {
+        $pid = $request->pid;
+        $model = ProjectModel::find($pid);
+        if (!$model) {
+            return response()->json(['message' => 'Data not found'], 404);
+        }
+
+        return response()->json($model, 200);
+    }
+
     public function selectProject_post(Request $request)
     {
         $aid = $request->aid;

@@ -72,6 +72,7 @@ Route::post('/POST/selectjpimage', [JourneyProjectController::class, "selectJpim
 Route::post('/POST/searchsimilarattraction', [SearchController::class, "selectSimilarAttraction_post"]);
 Route::post('/POST/searchproject', [SearchController::class, "selectProject_post"]);
 Route::post('/POST/searchattraction', [SearchController::class, "selectAttraction_post"]);
+Route::post('/POST/searchprojectname', [SearchController::class, "selectProjectName_post"]);
 
 // Showlist APIs
 Route::post("/POST/userrelatedids", [UserApis::class, "userRelatedIds"]);

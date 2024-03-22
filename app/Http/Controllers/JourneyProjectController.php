@@ -357,9 +357,9 @@ class JourneyProjectController extends Controller
 
     public function selectJourneyProject_post(Request $request)
     {
-        $jpid = $request->jpid;
-        $model = JourneyProjectModel::find($jpid);
-
+        $jid = $request->jid;
+        $model = JourneyProjectModel::where('jid', $jid)->get();
+        
         if (!$model) {
             return response()->json(['message' => 'Data not found'], 404);
         }
