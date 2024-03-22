@@ -24,7 +24,7 @@ class Comments extends Controller
         $comment = CommentModel::with("userdata")->get();
         $result = array();
         foreach( $comment as $item ) {
-            $result[] = CommentModel::comment_api_item_formation($item);
+            $result[] = CommentModel::comment_api_item_formation($item, $item->userdata);
         }
         return [
             "message" => "Success",
@@ -80,7 +80,7 @@ class Comments extends Controller
     public function show(string $id)
     {
         $comment = CommentModel::with("userdata")->find($id);
-        $result = CommentModel::comment_api_item_formation($comment);
+        $result = CommentModel::comment_api_item_formation($comment, $comment->userdata);
         $histroy = isset($comment) ? $comment->comment_histroy() : [];
         $code = isset($comment) ? 200 : 404;
         return response([

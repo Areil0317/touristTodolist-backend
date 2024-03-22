@@ -58,9 +58,14 @@ class CommentModel extends Model
         ];
     }
 
-    public static function comment_api_item_formation($comment)
+    /**
+     * API formation:
+     * This method is supposed to be the "format_api_response" method but it was extracted because:
+     * 1. The method should be a public static method.
+     * 2. The way the "user" variable accessed is different.
+     */
+    public static function comment_api_item_formation($comment, $user)
     {
-        $user = $comment["userdata"];
         $photo = $user["photo"];
         $username = $user["name"];
         return [
