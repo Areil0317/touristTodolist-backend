@@ -46,15 +46,20 @@ class CommentModel extends Model
     {
         $photo = isset($user) ? $user->getPhotoUrlAttribute() : "";
         $username = isset($user) ? $user->name : "";
+        $project = ProjectModel::find($comment->pid);
         return [
+            // ID info
             'cid' => $comment->cid,
-            'uid' => $comment->uid,
-            'pid' => $comment->pid,
+            // 'uid' => $comment->uid,
+            // 'pid' => $project->pid,
+            // Data info
+            'projectname' => $project->pname,
             'username' => $username,
+            'photo' => $photo,
+            // Comment info
             'comment' => $comment->comment,
             'rate' => $comment->rate,
             'created_at' => $comment->created_at,
-            'photo' => $photo,
         ];
     }
 
@@ -68,15 +73,20 @@ class CommentModel extends Model
     {
         $photo = $user["photo"];
         $username = $user["name"];
+        $project = ProjectModel::find($comment->pid);
         return [
+            // ID info
             'cid' => $comment->cid,
-            'uid' => $comment->uid,
-            'pid' => $comment->pid,
+            // 'uid' => $comment->uid,
+            // 'pid' => $comment->pid,
+            // Data info
+            'projectname' => $project->pname,
             'username' => $username,
+            'photo' => $photo,
+            // Comment info
             'comment' => $comment->comment,
             'rate' => $comment->rate,
             'created_at' => $comment->created_at,
-            'photo' => $photo,
         ];
     }
 
