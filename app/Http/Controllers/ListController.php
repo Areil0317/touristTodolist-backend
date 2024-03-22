@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\ListModel;
+use Illuminate\Support\Facades\Auth;
 
 
 class ListController extends Controller
@@ -93,5 +94,17 @@ class ListController extends Controller
         }
 
         return response()->json($model, 200);
+    }
+
+    public function getTouristListTitles(Request $request)
+    {
+        // 從請求中取得當前驗證的用戶
+        $user = Auth::user();
+
+        // 根據用戶id查找touristlist中的標題
+        $titles = ListModel::where('uid', $user->id)->pluck('title');
+
+        // 返回查詢結果
+        return response()->json(['titles' => $titles]);
     }
 }

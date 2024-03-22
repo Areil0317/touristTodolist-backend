@@ -42,16 +42,51 @@ class CommentModel extends Model
     /**
      * API formation: Format comment data for API response.
      */
-    private function format_api_response($comment, $photo)
+    private function format_api_response($comment, $user)
     {
+        $photo = isset($user) ? $user->getPhotoUrlAttribute() : "";
+        $username = isset($user) ? $user->name : "";
+        $project = ProjectModel::find($comment->pid);
         return [
+            // ID info
             'cid' => $comment->cid,
-            'uid' => $comment->uid,
-            'pid' => $comment->pid,
+            // 'uid' => $comment->uid,
+            // 'pid' => $project->pid,
+            // Data info
+            'projectname' => $project->pname,
+            'username' => $username,
+            'photo' => $photo,
+            // Comment info
             'comment' => $comment->comment,
             'rate' => $comment->rate,
             'created_at' => $comment->created_at,
+        ];
+    }
+
+    /**
+     * API formation:
+     * This method is supposed to be the "format_api_response" method but it was extracted because:
+     * 1. The method should be a public static method.
+     * 2. The way the "user" variable accessed is different.
+     */
+    public static function comment_api_item_formation($comment, $user)
+    {
+        $photo = $user["photo"];
+        $username = $user["name"];
+        $project = ProjectModel::find($comment->pid);
+        return [
+            // ID info
+            'cid' => $comment->cid,
+            // 'uid' => $comment->uid,
+            // 'pid' => $comment->pid,
+            // Data info
+            'projectname' => $project->pname,
+            'username' => $username,
             'photo' => $photo,
+            // Comment info
+            'comment' => $comment->comment,
+            'rate' => $comment->rate,
+            'created_at' => $comment->created_at,
         ];
     }
 
@@ -61,10 +96,9 @@ class CommentModel extends Model
     public function find_by_user($uid) {
         try {
             $user = User::find($uid);
-            $photo = $user->getPhotoUrlAttribute();
             $comments = $this->where("uid", $uid)->get();
-            return $comments->map(function ($comment) use ($photo) {
-                return $this->format_api_response($comment, $photo);
+            return $comments->map(function ($comment) use ($user) {
+                return $this->format_api_response($comment, $user);
             })->all();
         } catch(\Exception $error) {
             return $error->getMessage();
@@ -76,8 +110,7 @@ class CommentModel extends Model
             $comments = $this->where("pid", $pid)->get();
             return $comments->map(function ($comment) {
                 $user = User::find($comment["uid"]);
-                $photo = $user ? $user->getPhotoUrlAttribute() : null;
-                return $this->format_api_response($comment, $photo);
+                return $this->format_api_response($comment, $user);
             })->all();
         } catch(\Exception $error) {
             return $error->getMessage();
