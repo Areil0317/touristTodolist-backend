@@ -36,7 +36,7 @@ Route::get('/test', function () {
 Route::post('/POST/addlist', [ListController::class, "addList_post"]);
 Route::post('/POST/deletelist', [ListController::class, "deleteList_post"]);
 Route::post('/POST/updatelist', [ListController::class, "updateList_post"]);
-Route::post('/POST/selectlist', [ListController::class, "selectList_post"]);
+Route::get('/GET/selectlist', [ListController::class, "selectList_post"]);
 
 // Journey APIs
 Route::post('/POST/addjourney', [JourneyController::class, "addJourney_post"]);
@@ -75,7 +75,7 @@ Route::post('/POST/searchattraction', [SearchController::class, "selectAttractio
 Route::post('/POST/searchprojectname', [SearchController::class, "selectProjectName_post"]);
 
 // Showlist APIs
-Route::post("/POST/userrelatedids", [UserApis::class, "userRelatedIds"]);
+Route::get("/GET/userrelatedids", [UserApis::class, "userRelatedIds"]);
 
 // User APIs
 Route::post('/register', [AuthController::class, 'register']);
