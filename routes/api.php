@@ -32,11 +32,15 @@ Route::get('/test', function () {
     ], 200);
 });
 
+// User All list APIs userAllInformation_get
+Route::middleware('auth:sanctum')->get('/user_all_informations',[UserApis::class, "userAllInformation_get"]);
+
+
 // List APIs
 Route::post('/POST/addlist', [ListController::class, "addList_post"]);
 Route::post('/POST/deletelist', [ListController::class, "deleteList_post"]);
 Route::post('/POST/updatelist', [ListController::class, "updateList_post"]);
-Route::get('/GET/selectlist', [ListController::class, "selectList_post"]);
+Route::post('/POST/selectlist', [ListController::class, "selectList_post"]);
 
 // Journey APIs
 Route::post('/POST/addjourney', [JourneyController::class, "addJourney_post"]);
@@ -75,7 +79,7 @@ Route::post('/POST/searchattraction', [SearchController::class, "selectAttractio
 Route::post('/POST/searchprojectname', [SearchController::class, "selectProjectName_post"]);
 
 // Showlist APIs
-Route::get("/GET/userrelatedids", [UserApis::class, "userRelatedIds"]);
+Route::post("/POST/userrelatedids", [UserApis::class, "userRelatedIds"]);
 
 // User APIs
 Route::post('/register', [AuthController::class, 'register']);
