@@ -113,6 +113,7 @@ class UserController extends Controller
 
         return response()->json([
             'totalScore' => $totalScore
-        ]);
+        ])
+            ->header('Access-Control-Allow-Origin', '*');
     }
 }
