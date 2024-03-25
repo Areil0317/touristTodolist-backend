@@ -52,8 +52,6 @@ Route::post('/POST/selectjourney', [JourneyController::class, "selectJourney_pos
 Route::post('/POST/addjimage', [JourneyController::class, "addJimage_post"]);
 Route::post('/POST/deletejimage', [JourneyController::class, "deleteJimage_post"]);
 Route::post('/POST/selectjimage', [JourneyController::class, "selectJimage_post"]);
-Route::get("/uploaded-images", [ImagesController::class, "list_by_token"])->middleware('auth:sanctum');
-Route::get("/uploaded-images/{uid}", [ImagesController::class, "list_by_uid"]);
 
 // JourneyProject APIs
 Route::post('/POST/addjourneyproject', [JourneyProjectController::class, "addJourneyProject_post"]);
@@ -102,7 +100,8 @@ Route::put('/updatePassword', [UserController::class, 'updatePassword'])->middle
 Route::middleware('auth:sanctum')->get('/touristlist-title', [ListController::class, 'getTouristListTitles']);
 Route::middleware('auth:sanctum')->get('/user-tourlist', [ListController::class, 'getUserTourList']);
 Route::middleware('auth:sanctum')->get('/user-score', [UserController::class, 'calculateScore']);
-
+Route::middleware('auth:sanctum')->get("/uploaded-images", [ImagesController::class, "list_by_token"]);
+Route::get("/uploaded-images/{uid}", [ImagesController::class, "list_by_uid"]);
 
 
 // Comment APIs
