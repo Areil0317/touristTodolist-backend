@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JourneyProjectModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\ListModel;
 use Illuminate\Support\Facades\Auth;
+use App\Models\JourneyModel;
+use App\Models\AttractionModel;
 
 
 class ListController extends Controller
@@ -106,5 +109,44 @@ class ListController extends Controller
 
         // 返回查詢結果
         return response()->json(['titles' => $titles]);
+    }
+
+    public function getUserTourList(Request $request)
+    {
+        $user = $request->user(); // 通過Sanctum獲取當前認證的用戶
+
+        $tourLists = ListModel::where('uid', $user->id)->get();
+
+        $result = [];
+        foreach ($tourLists as $tourList) {
+            // 為每個tourList項目查詢相應的Journeys
+            $journeys = JourneyModel::where('tlid', $tourList->tlid)->get();
+
+            $journeyDetails = [];
+            foreach ($journeys as $journey) {
+                // 為每個Journey查詢相應的Attractions
+                $attractions = AttractionModel::where('aid', $journey->aid)->pluck('aname')->toArray();
+
+                // 查詢與當前Journey相關的所有JourneyProject
+                $projects = JourneyProjectModel::where('jid', $journey->jid)
+                    ->join('project', 'journeyproject.pid', '=', 'project.pid')
+                    ->pluck('project.pname')->unique();
+
+                // 將景點和項目信息加入到每個Journey的詳細信息中
+                $journeyDetails[] = [
+                    'journeyId' => $journey->jid,
+                    'attractions' => $attractions,
+                    'projects' => $projects
+                ];
+            }
+
+            // 將每個tourList及其對應的Journeys加入結果數據中
+            $result[] = [
+                'tourListTitle' => $tourList->title,
+                'journeys' => $journeyDetails
+            ];
+        }
+
+        return response()->json($result);
     }
 }

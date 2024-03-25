@@ -90,6 +90,8 @@ Route::put('/updatePassword', [UserController::class, 'updatePassword'])->middle
 
 //Attribution APIs
 Route::middleware('auth:sanctum')->get('/touristlist-title', [ListController::class, 'getTouristListTitles']);
+Route::middleware('auth:sanctum')->get('/user-tourlist', [ListController::class, 'getUserTourList']);
+
 
 // Comment APIs
 Route::resource("/comment", Comments::class);
