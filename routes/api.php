@@ -93,7 +93,7 @@ Route::middleware('auth:sanctum')->put('/update', [UserController::class, 'updat
 Route::put('/updatePassword', [UserController::class, 'updatePassword'])->middleware('auth:sanctum');
 
 //Attribution APIs
-Route::middleware('auth:sanctum')->get('/touristlist-title', [ListController::class, 'getTouristListTitles']);
+Route::get('/touristlist-title', [ListController::class, 'getTouristListTitles']);
 
 // Comment APIs
 Route::resource("/comment", Comments::class);
