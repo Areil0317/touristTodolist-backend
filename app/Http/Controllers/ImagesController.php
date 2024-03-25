@@ -10,25 +10,16 @@ class ImagesController extends Controller
 {
     private function get_user_created_lists($uid) {
         return DB::table("touristlist")
-            ->select("tlid")->where("uid", [$uid])
+            ->select("tlid")
+            ->where("uid", [$uid])
             ->pluck("tlid")
             ->all();
     }
     private function get_journey_list($tlids) {
-        $sql = DB::table("journey")
-            ->select("jid")
-            ->whereIn("tlid", $tlids)
-            ->pluck("jid")
-            ->all();
-        return $sql;
+        return $this->get_all_datas_from_db_by_list("journey", "jid", "tlid", $tlids);
     }
     private function get_journey_project_list($jids) {
-        $sql = DB::table("journeyproject")
-            ->select("jpid")
-            ->whereIn("jid", $jids)
-            ->pluck("jpid")
-            ->all();
-        return $sql;
+        return $this->get_all_datas_from_db_by_list("journeyproject", "jpid", "jid", $jids);;
     }
     /**
      * If you don't know how it works, think like this:
@@ -38,7 +29,7 @@ class ImagesController extends Controller
      * ... WHERE $id_column ...
      * ... IN ($id_array);
      */
-    private function get_images_from_db($table, $url_column, $id_column, $id_array) {
+    private function get_all_datas_from_db_by_list($table, $url_column, $id_column, $id_array) {
         $sql = DB::table($table)
             ->select($url_column)
             ->whereIn($id_column, $id_array)
@@ -53,8 +44,8 @@ class ImagesController extends Controller
         $jplist = $this->get_journey_project_list($jlist);
 
         // List all images
-        $list_images = $this->get_images_from_db("jimage", "jimg", "jid", $jlist);
-        $project_list_images = $this->get_images_from_db("jpimage", "jpimg", "jpid", $jplist);
+        $list_images = $this->get_all_datas_from_db_by_list("jimage", "jimg", "jid", $jlist);
+        $project_list_images = $this->get_all_datas_from_db_by_list("jpimage", "jpimg", "jpid", $jplist);
         return [
             "message" => "success",
             "result" => array_merge($list_images, $project_list_images),
