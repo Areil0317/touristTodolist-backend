@@ -12,9 +12,8 @@ class ListController extends Controller
 {
     public function __construct()
     {
-        $this->middleware("auth:sanctum")->only([
-            "addList_post",
-            "getTouristListTitles"
+        $this->middleware("auth:sanctum")->except([
+            "selectList_post"
         ]);
     }
     /**
@@ -60,9 +59,22 @@ class ListController extends Controller
 
     public function deleteList_post(Request $request)
     {
-
+        $user = Auth::user();
         $tlid = $request->tlid;
         $model = ListModel::find($tlid);
+
+        if( !isset($user) ) {
+            return response([
+                "message" => "No such user",
+                "user" => $user
+            ], 401);
+        }
+        if( $model->uid != $user->id ) {
+            return response([
+                "message" => "Unauthorised user",
+                "user" => $user->id
+            ], 401);
+        }
         $model->delete();
 
         return response()->json(['message' => 'Data deleted successfully'], 204);
@@ -70,12 +82,26 @@ class ListController extends Controller
 
     public function updateList_post(Request $request)
     {
-
+        $user = Auth::user();
         $tlid = $request->tlid;
         $model = ListModel::find($tlid);
 
+        if( !isset($user) ) {
+            return response([
+                "message" => "No such user",
+                "user" => $user
+            ], 401);
+        }
         if (!$model) {
-            return response()->json(['message' => 'Data not found'], 404);
+            return response([
+                'message' => 'Data not found'
+            ], 404);
+        }
+        if( $model->uid != $user->id ) {
+            return response([
+                "message" => "Unauthorised user",
+                "user" => $user->id
+            ], 401);
         }
 
         $model->title = $request->title;
@@ -104,7 +130,6 @@ class ListController extends Controller
 
     public function selectList_post(Request $request)
     {
-
         $tlid = $request->tlid;
         $model = ListModel::find($tlid);
 
