@@ -10,11 +10,30 @@ use Illuminate\Support\Facades\Auth;
 
 class ListController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware("auth:sanctum")->only([
+            "addList_post",
+            "getTouristListTitles"
+        ]);
+    }
+    /**
+     * You need to attactch title, the title of the list:
+     *
+     * {"name":"Example list"}
+     */
     public function addList_post(Request $request)
     {
-
+        // 從請求中取得當前驗證的用戶
+        $user = Auth::user();
+        if( !isset($user) ) {
+            return response([
+                "message" => "No such user",
+                "user" => $user
+            ], 401);
+        }
         $model = new ListModel;
-        $model->uid = $request->id;
+        $model->uid = $user->id;
         $model->title = $request->title;
 
         if ($request->start_date == null) {
