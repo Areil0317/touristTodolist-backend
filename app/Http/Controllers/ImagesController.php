@@ -57,7 +57,7 @@ class ImagesController extends Controller
         $project_list_images = $this->get_images_from_db("jpimage", "jpimg", "jpid", $jplist);
         return [
             "message" => "success",
-            "list" => array_merge($list_images, $project_list_images),
+            "result" => array_merge($list_images, $project_list_images),
         ];
     }
     public function list_by_token() {
