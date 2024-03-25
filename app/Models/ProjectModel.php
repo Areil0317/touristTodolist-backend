@@ -12,6 +12,11 @@ class ProjectModel extends Model
     protected $primaryKey = 'pid';
     public $timestamps = false;
 
+
+    public function journeyProjects()
+    {
+        return $this->hasMany(JourneyProjectModel::class,'pid');
+    }
     protected $fillable = [
         'pname',
         'aid'

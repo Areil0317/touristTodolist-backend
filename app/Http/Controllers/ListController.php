@@ -105,14 +105,15 @@ class ListController extends Controller
     public function selectList_post(Request $request)
     {
 
-        $tlid = $request->tlid;
-        $model = ListModel::find($tlid);
+        $user = Auth::user();
+        $touristlists = ListModel::where('uid', $user->id)->get();
+        
 
-        if (!$model) {
+        if (!$touristlists) {
             return response()->json(['message' => 'Data not found'], 404);
         }
 
-        return response()->json($model, 200);
+        return response()->json($touristlists->toArray(), 200);
     }
 
     public function getTouristListTitles(Request $request)

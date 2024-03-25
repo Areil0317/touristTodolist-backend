@@ -25,6 +25,12 @@ class User extends Authenticatable
         'cellphone'
     ];
 
+    public function touristLists()
+    {
+        return $this->hasMany(ListModel::class,'uid');
+    }
+
+
     public function getPhotoUrlAttribute()
     {
         if ($this->photo) {

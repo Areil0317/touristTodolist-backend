@@ -16,4 +16,9 @@ class AttractionModel extends Model
         'aname'
     ];
 
+    public function journeys()
+    {
+        return $this->hasMany(JourneyModel::class,'aid');
+    }
+    
 }

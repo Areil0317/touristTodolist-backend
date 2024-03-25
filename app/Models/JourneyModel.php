@@ -11,5 +11,13 @@ class JourneyModel extends Model
     protected $primaryKey = 'jid';
     public $timestamps = false;
 
+    public function journeyProjects()
+    {
+        return $this->hasMany(JourneyProjectModel::class,'jid');
+    }
 
+    public function attraction()
+    {
+        return $this->belongsTo(AttractionModel::class,'aid');
+    }
 }

@@ -10,6 +10,12 @@ class ListModel extends Model
     protected $table = 'touristlist';
     protected $primaryKey = 'tlid';
 
+    public function journeys()
+    {
+        return $this->hasMany(JourneyModel::class,'tlid');
+    }
+
+
     public static function listTimeStamp()
     {
         parent::listTimeStamp();

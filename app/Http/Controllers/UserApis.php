@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\ListModel;
 use App\Models\JourneyModel;
 use App\Models\JourneyProjectModel;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -37,20 +38,21 @@ class UserApis extends Controller
     public function userAllInformation_get(Request $request) {
         
         $user = Auth::user();
+        $userWithTouristLists = User::with('touristLists.journeys.attraction', 'touristLists.journeys.journeyProjects.project')
+        ->find($user->id)->touristLists;
+        // $touristLists = $userWithTouristLists->touristLists;
+        // $result = $touristlists->map(function ($touristlist) {
+        //     return [
+        //         'tlid' => $touristlist->tlid,
+        //         'id' => $touristlist->uid,
+        //         'jid' => JourneyModel::where('tlid', $touristlist->tlid)->get()->map(function ($journey) {
+        //             return ['jid' => $journey->jid];
+        //         })
+        //     ];
+        // });
+    
+    
 
-        $results = DB::table('touristlist')
-    ->leftJoin('journey', 'touristlist.tlid', '=', 'journey.tlid')
-    ->leftJoin('attractions', 'journey.aid', '=', 'attractions.aid')
-    ->leftJoin('jbudget', 'journey.jid', '=', 'jbudget.jid')
-    ->leftJoin('jimage', 'journey.jid', '=', 'jimage.jid')
-    ->leftJoin('journeyproject', 'journey.jid', '=', 'journeyproject.jid')
-    ->leftJoin('project', 'journeyproject.pid', '=', 'project.pid')
-    ->leftJoin('jpbudget', 'journeyproject.jpid', '=', 'jpbudget.jpbid')
-    ->leftJoin('jpimage', 'journeyproject.jpid', '=', 'jpimage.jpid')
-    ->where('touristlist.uid', '=', $user->id)
-    ->select('*')
-    ->get();
-
-        return response()->json($results);
+        return response()->json($userWithTouristLists);
     }
 }
