@@ -32,21 +32,23 @@ Route::get('/test', function () {
     ], 200);
 });
 
+// User All list APIs userAllInformation_get
+Route::middleware('auth:sanctum')->get('/user_all_informations', [UserApis::class, "userAllInformation_get"]);
+
+
 // List APIs
 Route::post('/POST/addlist', [ListController::class, "addList_post"]);
 Route::post('/POST/deletelist', [ListController::class, "deleteList_post"]);
 Route::post('/POST/updatelist', [ListController::class, "updateList_post"]);
-Route::get('/GET/selectlist', [ListController::class, "selectList_post"]);
+Route::post('/POST/selectlist', [ListController::class, "selectList_post"]);
 
 // Journey APIs
 Route::post('/POST/addjourney', [JourneyController::class, "addJourney_post"]);
 Route::post('/POST/deletejourney', [JourneyController::class, "deleteJourney_post"]);
 Route::post('/POST/updatejourney', [JourneyController::class, "updateJourney_post"]);
 Route::post('/POST/selectjourney', [JourneyController::class, "selectJourney_post"]);
-Route::post('/POST/addjbudget', [JourneyController::class, "addJbudget_post"]);
-Route::post('/POST/deletejbudget', [JourneyController::class, "deleteJbudget_post"]);
-Route::post('/POST/updatejbudget', [JourneyController::class, "updateJbudget_post"]);
-Route::post('/POST/selectjbudget', [JourneyController::class, "selectJbudget_post"]);
+
+// Image APIs
 Route::post('/POST/addjimage', [JourneyController::class, "addJimage_post"]);
 Route::post('/POST/deletejimage', [JourneyController::class, "deleteJimage_post"]);
 Route::post('/POST/selectjimage', [JourneyController::class, "selectJimage_post"]);
@@ -56,6 +58,12 @@ Route::post('/POST/addjourneyproject', [JourneyProjectController::class, "addJou
 Route::post('/POST/deletejourneyproject', [JourneyProjectController::class, "deleteJourneyProject_post"]);
 Route::post('/POST/updatejourneyproject', [JourneyProjectController::class, "updateJourneyProject_post"]);
 Route::post('/POST/selectjourneyproject', [JourneyProjectController::class, "selectJourneyProject_post"]);
+
+// JourneyBudget APIs
+Route::post('/POST/addjbudget', [JourneyController::class, "addJbudget_post"]);
+Route::post('/POST/deletejbudget', [JourneyController::class, "deleteJbudget_post"]);
+Route::post('/POST/updatejbudget', [JourneyController::class, "updateJbudget_post"]);
+Route::post('/POST/selectjbudget', [JourneyController::class, "selectJbudget_post"]);
 
 // Budget APIs
 Route::post('/POST/addjpbudget', [JourneyProjectController::class, "addJpbudget_post"]);
@@ -75,7 +83,7 @@ Route::post('/POST/searchattraction', [SearchController::class, "selectAttractio
 Route::post('/POST/searchprojectname', [SearchController::class, "selectProjectName_post"]);
 
 // Showlist APIs
-Route::get("/GET/userrelatedids", [UserApis::class, "userRelatedIds"]);
+Route::post("/POST/userrelatedids", [UserApis::class, "userRelatedIds"]);
 
 // User APIs
 Route::post('/register', [AuthController::class, 'register']);

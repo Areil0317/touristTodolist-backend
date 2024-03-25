@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\ListModel;
 use App\Models\JourneyModel;
 use App\Models\JourneyProjectModel;
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -33,10 +34,23 @@ class UserApis extends Controller
         return response()->json($data);
 
     }
-    public function showlist_get(Request $request) {
-        // $password = $request->password;
-        $email = $request->email;
-        $user = DB::select("select cost, listcost.tlid, title, users.id, name, email from touristlist left JOIN users ON touristlist.uid = users.id left JOIN listcost ON touristlist.tlid = listcost.tlid where email = ?", [$email]);
-        return response($user)->header("Access-Control-Allow-Origin", "*");
+    public function userAllInformation_get(Request $request) {
+        
+        $user = Auth::user();
+
+        $results = DB::table('touristlist')
+    ->leftJoin('journey', 'touristlist.tlid', '=', 'journey.tlid')
+    ->leftJoin('attractions', 'journey.aid', '=', 'attractions.aid')
+    ->leftJoin('jbudget', 'journey.jid', '=', 'jbudget.jid')
+    ->leftJoin('jimage', 'journey.jid', '=', 'jimage.jid')
+    ->leftJoin('journeyproject', 'journey.jid', '=', 'journeyproject.jid')
+    ->leftJoin('project', 'journeyproject.pid', '=', 'project.pid')
+    ->leftJoin('jpbudget', 'journeyproject.jpid', '=', 'jpbudget.jpbid')
+    ->leftJoin('jpimage', 'journeyproject.jpid', '=', 'jpimage.jpid')
+    ->where('touristlist.uid', '=', $user->id)
+    ->select('*')
+    ->get();
+
+        return response()->json($results);
     }
 }
