@@ -33,7 +33,7 @@ Route::get('/test', function () {
 });
 
 // User All list APIs userAllInformation_get
-Route::middleware('auth:sanctum')->get('/user_all_informations',[UserApis::class, "userAllInformation_get"]);
+Route::middleware('auth:sanctum')->get('/user_all_informations', [UserApis::class, "userAllInformation_get"]);
 
 
 // List APIs
@@ -97,7 +97,12 @@ Route::middleware('auth:sanctum')->put('/update', [UserController::class, 'updat
 Route::put('/updatePassword', [UserController::class, 'updatePassword'])->middleware('auth:sanctum');
 
 //Attribution APIs
-Route::get('/touristlist-title', [ListController::class, 'getTouristListTitles']);
+Route::middleware('auth:sanctum')->get('/touristlist-title', [ListController::class, 'getTouristListTitles']);
+Route::middleware('auth:sanctum')->get('/user-tourlist', [ListController::class, 'getUserTourList']);
+Route::middleware('auth:sanctum')->get('/user-score', [UserController::class, 'calculateScore']);
+Route::middleware('auth:sanctum')->get("/uploaded-images", [ImagesController::class, "list_by_token"]);
+Route::get("/uploaded-images/{uid}", [ImagesController::class, "list_by_uid"]);
+
 
 // Comment APIs
 Route::resource("/comment", Comments::class);

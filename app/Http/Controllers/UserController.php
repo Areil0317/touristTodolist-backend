@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CommentModel;
+use App\Models\JimageModel;
+use App\Models\JourneyModel;
+use App\Models\JourneyProjectModel;
+use App\Models\JpimageModel;
+use App\Models\ListModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\CssSelector\Parser\Handler\CommentHandler;
 
 // use Illuminate\Support\Facades\Storage;
 
@@ -81,5 +88,32 @@ class UserController extends Controller
         ]);
 
         return response()->json(['message' => 'Password updated successfully!']);
+    }
+
+    public function calculateScore(Request $request)
+    {
+        $user = $request->user(); // 獲取當前認證的用戶
+
+        // 計算 TouristList 分數
+        $touristListScore = ListModel::where('uid', $user->id)->count() * 5;
+
+        // 計算 Journey 相關分數
+        $journeys = JourneyModel::whereIn('tlid', ListModel::where('uid', $user->id)->pluck('tlid'))->get();
+        $journeyScore = $journeys->count() * 5;
+        $jimageScore = JimageModel::whereIn('jid', $journeys->pluck('jid'))->count() * 20;
+        $journeyProjectScore = JourneyProjectModel::whereIn('jid', $journeys->pluck('jid'))->count() * 5;
+
+        // 計算 JourneyProject 相關分數
+        $jpimageScore = JpimageModel::whereIn('jpid', JourneyProjectModel::whereIn('jid', $journeys->pluck('jid'))->pluck('jpid'))->count() * 20;
+
+        //計算comment分數
+        $commentscore = CommentModel::where('uid', $user->id)->count() * 20;
+        // 總分
+        $totalScore = $touristListScore + $journeyScore + $jimageScore + $journeyProjectScore + $jpimageScore + $commentscore;
+
+        return response()->json([
+            'totalScore' => $totalScore
+        ])
+            ->header('Access-Control-Allow-Origin', '*');
     }
 }
