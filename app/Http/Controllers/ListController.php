@@ -16,7 +16,7 @@ class ListController extends Controller
     public function __construct()
     {
         $this->middleware("auth:sanctum")->except([
-            "selectList_post"
+            // "selectList_post"
         ]);
     }
     /**
@@ -133,10 +133,9 @@ class ListController extends Controller
 
     public function selectList_post(Request $request)
     {
-
         $user = Auth::user();
         $touristlists = ListModel::where('uid', $user->id)->get();
-        
+
 
         if (!$touristlists) {
             return response()->json(['message' => 'Data not found'], 404);
