@@ -49,7 +49,9 @@ class UserController extends Controller
         $user = Auth::user();
 
         if (!$user) {
-            return response()->json(['message' => '未找到認證的用戶。'], 404);
+            return response()->json([
+                'message' => '未找到認證的用戶。'
+            ], 404);
         }
 
         $request->validate([
@@ -79,7 +81,9 @@ class UserController extends Controller
 
         if (!Hash::check($request->current_password, $user->password)) {
             throw ValidationException::withMessages([
-                'current_password' => ['The provided password does not match your current password.'],
+                'current_password' => [
+                    'The provided password does not match your current password.'
+                ],
             ]);
         }
 
@@ -87,7 +91,9 @@ class UserController extends Controller
             'password' => Hash::make($request->new_password),
         ]);
 
-        return response()->json(['message' => 'Password updated successfully!']);
+        return response()->json([
+            'message' => 'Password updated successfully!'
+        ]);
     }
 
     public function calculateScore(Request $request)

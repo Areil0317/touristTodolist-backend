@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class ImagesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware("auth:sanctum")->except([
+            "list_by_uid"
+        ]);
+    }
     private function get_user_created_lists($uid) {
         return DB::table("touristlist")
             ->select("tlid")
@@ -46,8 +52,9 @@ class ImagesController extends Controller
         // List all images
         $list_images = $this->get_all_datas_from_db_by_list("jimage", "jimg", "jid", $jlist);
         $project_list_images = $this->get_all_datas_from_db_by_list("jpimage", "jpimg", "jpid", $jplist);
+        $result = array_merge($list_images, $project_list_images);
         return [
-            "message" => "success",
+            "message" => count($result) > 0 ? "success" : "no images",
             "result" => array_merge($list_images, $project_list_images),
         ];
     }

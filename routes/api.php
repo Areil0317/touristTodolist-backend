@@ -93,14 +93,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::post('/update-avatar', [UserController::class, 'updateAvatar'])->name('profile.update-avatar');
-Route::middleware('auth:sanctum')->put('/update', [UserController::class, 'update']);
-Route::put('/updatePassword', [UserController::class, 'updatePassword'])->middleware('auth:sanctum');
+Route::put('/update', [UserController::class, 'update']);
+Route::put('/updatePassword', [UserController::class, 'updatePassword']);
 
 //Attribution APIs
 Route::middleware('auth:sanctum')->get('/touristlist-title', [ListController::class, 'getTouristListTitles']);
 Route::middleware('auth:sanctum')->get('/user-tourlist', [ListController::class, 'getUserTourList']);
-Route::middleware('auth:sanctum')->get('/user-score', [UserController::class, 'calculateScore']);
-Route::middleware('auth:sanctum')->get("/uploaded-images", [ImagesController::class, "list_by_token"]);
+Route::get('/user-score', [UserController::class, 'calculateScore']);
+Route::get("/uploaded-images", [ImagesController::class, "list_by_token"]);
 Route::get("/uploaded-images/{uid}", [ImagesController::class, "list_by_uid"]);
 
 
