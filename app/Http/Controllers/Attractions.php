@@ -8,14 +8,6 @@ use App\Models\AttractionModel;
 
 class Attractions extends Controller
 {
-    private function api_formation($result, $input = "", $input_message = "") {
-        $default_message = $result ? "Success" : "Error";
-        return [
-            "message" => $input_message ? $input_message : $default_message,
-            "input" => $input,
-            "result" => $result,
-        ];
-    }
     /**
      * Display a listing of the resource.
      */
@@ -53,7 +45,12 @@ class Attractions extends Controller
             "aname" => $request->aname
         ]);
         $code = $command ? 200 : 400;
-        return response( $this->api_formation($command, $request->aname), $code )->header("Access-Control-Allow-Origin", "*");
+        $message = $command ? "Success" : "Attraction NOT created";
+        return response()->json([
+            "message" => $message,
+            "input" => $request->aname,
+            "result" => $command,
+        ], $code)->header("Access-Control-Allow-Origin", "*");
     }
 
     /**
@@ -61,9 +58,11 @@ class Attractions extends Controller
      */
     public function show(string $id)
     {
-        $item = AttractionModel::find($id);
-        $code = $item ? 200 : 400;
-        return response( $this->api_formation($item, $id), $code)->header("Access-Control-Allow-Origin", "*");
+        $attraction = AttractionModel::find($id);
+        if( $attraction ) {
+            return $this->success_response( "Success", $id, $attraction );
+        }
+        return $this->error_response( "Not found", $id, $attraction, 404 );
     }
 
     /**
@@ -93,38 +92,32 @@ class Attractions extends Controller
     {
         $attraction = AttractionModel::find($id);
         if (!$attraction) {
-            return response()->json(
-                $this->api_formation(
-                    $attraction,
-                    $id,
-                    "Attraction not found"
-                ),
-                404
-            )->header("Access-Control-Allow-Origin", "*");
+            return $this->error_response( "Attraction not found", $id, $attraction, 404 );
         }
-
         $attraction->delete();
-
-        return response(
-            $this->api_formation(
-                $attraction,
-                $id,
-                "Attraction deleted successfully"
-            ),
-            200
-        )->header("Access-Control-Allow-Origin", "*");
+        return $this->success_response( "Attraction deleted successfully", $id, $attraction );
     }
 
     public function show_by_name(string $aname)
     {
-        $command = AttractionModel::where("aname", $aname)->first();
-        $code = $command ? 200 : 404;
-        $message = $command ? "Success" : "No data";
-        $api = $this->api_formation(
-            $command,
-            $aname,
-            $message
-        );
-        return response( $api, $code, )->header("Access-Control-Allow-Origin", "*");
+        $attraction = AttractionModel::where("aname", $aname)->first();
+        if( $attraction ) {
+            return $this->success_response( "Success", $aname, $attraction );
+        }
+        return $this->error_response( "Not found", $aname, $attraction, 404 );
+    }
+    private function success_response($message, $input, $result) {
+        return response()->json([
+            "message" => $message,
+            "input" => $input,
+            "result" => $result,
+        ], 200)->header("Access-Control-Allow-Origin", "*");;
+    }
+    private function error_response($message = "Error", $input, $result, $code = 400) {
+        return response()->json([
+            "message" => $message,
+            "input" => $input,
+            "result" => $result,
+        ], $code)->header("Access-Control-Allow-Origin", "*");;
     }
 }
