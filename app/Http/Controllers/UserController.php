@@ -97,17 +97,20 @@ class UserController extends Controller
         // 計算 TouristList 分數
         $touristListScore = ListModel::where('uid', $user->id)->count() * 5;
 
-        // 計算 Journey 相關分數
+        // 計算 Journey list 相關分數
         $journeys = JourneyModel::whereIn('tlid', ListModel::where('uid', $user->id)->pluck('tlid'))->get();
         $journeyScore = $journeys->count() * 5;
+
+        // 計算 Journey image 相關分數
         $jimageScore = JimageModel::whereIn('jid', $journeys->pluck('jid'))->count() * 20;
         $journeyProjectScore = JourneyProjectModel::whereIn('jid', $journeys->pluck('jid'))->count() * 5;
 
         // 計算 JourneyProject 相關分數
         $jpimageScore = JpimageModel::whereIn('jpid', JourneyProjectModel::whereIn('jid', $journeys->pluck('jid'))->pluck('jpid'))->count() * 20;
 
-        //計算comment分數
+        //計算 comment 分數
         $commentscore = CommentModel::where('uid', $user->id)->count() * 20;
+
         // 總分
         $totalScore = $touristListScore + $journeyScore + $jimageScore + $journeyProjectScore + $jpimageScore + $commentscore;
 
