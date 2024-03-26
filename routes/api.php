@@ -31,7 +31,6 @@ Route::get('/test', function () {
 // User All list APIs userAllInformation_get
 Route::middleware('auth:sanctum')->get('/user_all_informations', [UserApis::class, "userAllInformation_get"]);
 
-
 // List APIs
 Route::post('/POST/addlist', [ListController::class, "addList_post"]);
 Route::post('/POST/deletelist', [ListController::class, "deleteList_post"]);
@@ -61,7 +60,7 @@ Route::post('/POST/deletejbudget', [JourneyController::class, "deleteJbudget_pos
 Route::post('/POST/updatejbudget', [JourneyController::class, "updateJbudget_post"]);
 Route::post('/POST/selectjbudget', [JourneyController::class, "selectJbudget_post"]);
 
-// Budget APIs
+// JourneyProjectBudget APIs
 Route::post('/POST/addjpbudget', [JourneyProjectController::class, "addJpbudget_post"]);
 Route::post('/POST/deletejpbudget', [JourneyProjectController::class, "deleteJpbudget_post"]);
 Route::post('/POST/updatejpbudget', [JourneyProjectController::class, "updateJpbudget_post"]);
@@ -101,7 +100,6 @@ Route::get('/user-tourlist', [ListController::class, 'getUserTourList']);
 Route::get('/user-score', [UserController::class, 'calculateScore']);
 Route::get("/uploaded-images", [ImagesController::class, "list_by_token"]);
 Route::get("/uploaded-images/{uid}", [ImagesController::class, "list_by_uid"]);
-
 
 // Comment APIs
 Route::resource("/comment", Comments::class);
