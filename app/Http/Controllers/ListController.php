@@ -34,30 +34,26 @@ class ListController extends Controller
                 "user" => $user
             ], 401);
         }
+
+        // Create a new ListModel instance
         $model = new ListModel;
         $model->uid = $user->id;
         $model->title = $request->title;
 
-        if ($request->start_date == null) {
-            $model->start_date = $model->freshTimestamp();
-        } else {
-            $model->start_date = $request->start_date;
-        }
+        // Set dates
+        $model->start_date = $request->start_date ?? $model->freshTimestamp();
+        $model->end_date = $request->end_date ?? $model->start_date;
 
-        if ($request->end_date == null) {
-            $model->end_date = $model->start_date;
-        } else {
-            $model->end_date = $request->end_date;
-        }
-        $startDate = strtotime($model->start_date);
-        $endDate = strtotime($model->end_date);
-        if ($endDate < $startDate) {
+        // Ensure end date is not before start date
+        if (strtotime($model->end_date) < strtotime($model->start_date)) {
             $model->end_date = $model->start_date;
         }
 
         $model->save();
-
-        return response()->json(['message' => 'Data created successfully'], 201);
+        return response()->json([
+            "message" => "Data created successfully",
+            "result" => $model,
+        ], 201);
     }
 
     public function deleteList_post(Request $request)
