@@ -15,6 +15,7 @@ class Attractions extends Controller
     {
         $command = AttractionModel::all();
         return response([
+            "message" => "Success",
             "result" => $command
         ]);
     }
@@ -44,8 +45,12 @@ class Attractions extends Controller
         $command = AttractionModel::create([
             "aname" => $request->aname
         ]);
+
+        // Response formats
         $code = $command ? 200 : 400;
         $message = $command ? "Success" : "Attraction NOT created";
+
+        // Result
         return response()->json([
             "message" => $message,
             "input" => $request->aname,
@@ -91,11 +96,11 @@ class Attractions extends Controller
     public function destroy(string $id)
     {
         $attraction = AttractionModel::find($id);
-        if (!$attraction) {
-            return $this->error_response( "Attraction not found", $id, $attraction, 404 );
+        if ($attraction) {
+            $attraction->delete();
+            return $this->success_response( "Attraction deleted successfully", $id, $attraction );
         }
-        $attraction->delete();
-        return $this->success_response( "Attraction deleted successfully", $id, $attraction );
+        return $this->error_response( "Attraction not found", $id, $attraction, 404 );
     }
 
     public function show_by_name(string $aname)
