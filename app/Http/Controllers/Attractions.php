@@ -8,6 +8,13 @@ use App\Models\AttractionModel;
 
 class Attractions extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware("auth:sanctum")->only([
+            "store",
+            "destroy",
+        ]);
+    }
     /**
      * Display a listing of the resource.
      */
