@@ -17,10 +17,6 @@ use Illuminate\Support\Facades\Hash;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::get('/', function () {
     return response([
         'message' => 'Welcome to the project API!'
@@ -85,13 +81,19 @@ Route::post('/POST/searchprojectname', [SearchController::class, "selectProjectN
 // Showlist APIs
 Route::post("/POST/userrelatedids", [UserApis::class, "userRelatedIds"]);
 
-// User APIs
+// User authorisation APIs
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+
+// User updating APIs
 Route::post('/update-avatar', [UserController::class, 'updateAvatar'])->name('profile.update-avatar');
 Route::put('/update', [UserController::class, 'update']);
 Route::put('/updatePassword', [UserController::class, 'updatePassword']);
+Route::put('/update-password', [UserController::class, 'updatePassword']);
 
 //Attribution APIs
 Route::get('/touristlist-title', [ListController::class, 'getTouristListTitles']);
