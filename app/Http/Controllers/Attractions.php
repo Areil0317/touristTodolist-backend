@@ -46,24 +46,10 @@ class Attractions extends Controller
      */
     public function store(Request $request)
     {
-        if( !isset($request->aname) ) {
-            $api_result = $this->api_formation(
-                isset($request->aname),
-                $request->aname,
-                "Parameter not compeleted"
-            );
-            return response( $api_result, 400 );
-        }
-        $check = DB::table("attractions")->where("aname", $request->aname)->get();
-        if( count($check) > 0 ) {
-            $api_result = $this->api_formation(
-                $check,
-                $request->aname,
-                "Data already exist"
-            );
-            return response( $api_result, 409 );
-        }
-        $command = DB::table("attractions")->insertGetId([
+        $request->validate([
+            "aname" => "required|unique:attractions,aname"
+        ]);
+        $command = AttractionModel::create([
             "aname" => $request->aname
         ]);
         $code = $command ? 200 : 400;
