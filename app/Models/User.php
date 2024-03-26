@@ -30,15 +30,12 @@ class User extends Authenticatable
         return $this->hasMany(ListModel::class,'uid');
     }
 
-
     public function getPhotoUrlAttribute()
     {
         if ($this->photo) {
             // 本地儲存
             return asset('storage/' . $this->photo);
-
         }
-
         // 可以返回一個預設圖片的URL
         return "https://cdn.iconscout.com/icon/free/png-256/free-avatar-380-456332.png";
     }

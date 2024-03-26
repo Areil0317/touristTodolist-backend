@@ -4,24 +4,25 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\AttractionModel;
 
 class Attractions extends Controller
 {
-    private function api_formation($result, $input = "", $input_message = "") {
-        $default_message = $result ? "Success" : "Error";
-        return [
-            "message" => $input_message ? $input_message : $default_message,
-            "input" => $input,
-            "result" => $result,
-        ];
+    public function __construct()
+    {
+        $this->middleware("auth:sanctum")->only([
+            "store",
+            "destroy",
+        ]);
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $command = DB::table("attractions")->get();
+        $command = AttractionModel::all();
         return response([
+            "message" => "Success",
             "result" => $command
         ]);
     }
@@ -45,28 +46,23 @@ class Attractions extends Controller
      */
     public function store(Request $request)
     {
-        if( !isset($request->aname) ) {
-            $api_result = $this->api_formation(
-                isset($request->aname),
-                $request->aname,
-                "Parameter not compeleted"
-            );
-            return response( $api_result, 400 );
-        }
-        $check = DB::table("attractions")->where("aname", $request->aname)->get();
-        if( count($check) > 0 ) {
-            $api_result = $this->api_formation(
-                $check,
-                $request->aname,
-                "Data already exist"
-            );
-            return response( $api_result, 409 );
-        }
-        $command = DB::table("attractions")->insertGetId([
+        $request->validate([
+            "aname" => "required|unique:attractions,aname"
+        ]);
+        $command = AttractionModel::create([
             "aname" => $request->aname
         ]);
+
+        // Response formats
         $code = $command ? 200 : 400;
-        return response( $this->api_formation($command, $request->aname), $code )->header("Access-Control-Allow-Origin", "*");
+        $message = $command ? "Success" : "Attraction NOT created";
+
+        // Result
+        return response()->json([
+            "message" => $message,
+            "input" => $request->aname,
+            "result" => $command,
+        ], $code)->header("Access-Control-Allow-Origin", "*");
     }
 
     /**
@@ -74,9 +70,11 @@ class Attractions extends Controller
      */
     public function show(string $id)
     {
-        $command = DB::table("attractions")->where("aid", [$id])->get();
-        $code = $command ? 200 : 400;
-        return response( $this->api_formation($command, $id), $code)->header("Access-Control-Allow-Origin", "*");
+        $attraction = AttractionModel::find($id);
+        if( $attraction ) {
+            return $this->success_response( "Success", $id, $attraction );
+        }
+        return $this->error_response( "Not found", $id, $attraction, 404 );
     }
 
     /**
@@ -104,15 +102,34 @@ class Attractions extends Controller
      */
     public function destroy(string $id)
     {
-        $command = DB::table("attractions")->where("aid", [$id])->delete();
-        $code = $command ? 200 : 400;
-        return response( $this->api_formation($command, $id), $code)->header("Access-Control-Allow-Origin", "*");
+        $attraction = AttractionModel::find($id);
+        if ($attraction) {
+            $attraction->delete();
+            return $this->success_response( "Attraction deleted successfully", $id, $attraction );
+        }
+        return $this->error_response( "Attraction not found", $id, $attraction, 404 );
     }
 
     public function show_by_name(string $aname)
     {
-        $command = DB::table("attractions")->where("aname", [$aname])->get();
-        $code = count($command) > 0 ? 200 : 404;
-        return response( $this->api_formation($command, $aname), $code)->header("Access-Control-Allow-Origin", "*");
+        $attraction = AttractionModel::where("aname", $aname)->first();
+        if( $attraction ) {
+            return $this->success_response( "Success", $aname, $attraction );
+        }
+        return $this->error_response( "Not found", $aname, $attraction, 404 );
+    }
+    private function success_response($message, $input, $result) {
+        return response()->json([
+            "message" => $message,
+            "input" => $input,
+            "result" => $result,
+        ], 200)->header("Access-Control-Allow-Origin", "*");
+    }
+    private function error_response($message = "Error", $input, $result, $code = 400) {
+        return response()->json([
+            "message" => $message,
+            "input" => $input,
+            "result" => $result,
+        ], $code)->header("Access-Control-Allow-Origin", "*");
     }
 }

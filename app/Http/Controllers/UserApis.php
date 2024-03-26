@@ -20,7 +20,7 @@ class UserApis extends Controller
         $tlid = ListModel::where('uid', $uid)->pluck('tlid')->toArray();
         $jid = JourneyModel::whereIn('tlid', $tlid)->pluck('jid')->toArray();
         $jpid = JourneyProjectModel::whereIn('jid', $jid)->pluck('jpid')->toArray();
-        
+
         $data = [];
         if ($tlid !== null) {
             $data['tlid'] = $tlid;
@@ -31,12 +31,11 @@ class UserApis extends Controller
         if ($jpid !== null) {
             $data['jpid'] = $jpid;
         }
-    
+
         return response()->json($data);
 
     }
     public function userAllInformation_get(Request $request) {
-        
         $user = Auth::user();
         $userWithTouristLists = User::with('touristLists.journeys.attraction', 'touristLists.journeys.jbudgets','touristLists.journeys.jimages' ,'touristLists.journeys.journeyProjects.project','touristLists.journeys.journeyProjects.jpbudgets','touristLists.journeys.journeyProjects.jimages')
         ->find($user->id)->touristLists;

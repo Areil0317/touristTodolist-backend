@@ -49,7 +49,9 @@ class UserController extends Controller
         $user = Auth::user();
 
         if (!$user) {
-            return response()->json(['message' => '未找到認證的用戶。'], 404);
+            return response()->json([
+                'message' => '未找到認證的用戶。'
+            ], 404);
         }
 
         $request->validate([
@@ -79,7 +81,9 @@ class UserController extends Controller
 
         if (!Hash::check($request->current_password, $user->password)) {
             throw ValidationException::withMessages([
-                'current_password' => ['The provided password does not match your current password.'],
+                'current_password' => [
+                    'The provided password does not match your current password.'
+                ],
             ]);
         }
 
@@ -87,7 +91,9 @@ class UserController extends Controller
             'password' => Hash::make($request->new_password),
         ]);
 
-        return response()->json(['message' => 'Password updated successfully!']);
+        return response()->json([
+            'message' => 'Password updated successfully!'
+        ]);
     }
 
     public function calculateScore(Request $request)
@@ -97,17 +103,20 @@ class UserController extends Controller
         // 計算 TouristList 分數
         $touristListScore = ListModel::where('uid', $user->id)->count() * 5;
 
-        // 計算 Journey 相關分數
+        // 計算 Journey list 相關分數
         $journeys = JourneyModel::whereIn('tlid', ListModel::where('uid', $user->id)->pluck('tlid'))->get();
         $journeyScore = $journeys->count() * 5;
+
+        // 計算 Journey image 相關分數
         $jimageScore = JimageModel::whereIn('jid', $journeys->pluck('jid'))->count() * 20;
         $journeyProjectScore = JourneyProjectModel::whereIn('jid', $journeys->pluck('jid'))->count() * 5;
 
         // 計算 JourneyProject 相關分數
         $jpimageScore = JpimageModel::whereIn('jpid', JourneyProjectModel::whereIn('jid', $journeys->pluck('jid'))->pluck('jpid'))->count() * 20;
 
-        //計算comment分數
+        //計算 comment 分數
         $commentscore = CommentModel::where('uid', $user->id)->count() * 20;
+
         // 總分
         $totalScore = $touristListScore + $journeyScore + $jimageScore + $journeyProjectScore + $jpimageScore + $commentscore;
 

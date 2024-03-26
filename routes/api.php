@@ -17,10 +17,6 @@ use Illuminate\Support\Facades\Hash;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::get('/', function () {
     return response([
         'message' => 'Welcome to the project API!'
@@ -34,7 +30,6 @@ Route::get('/test', function () {
 
 // User All list APIs userAllInformation_get
 Route::middleware('auth:sanctum')->get('/user_all_informations', [UserApis::class, "userAllInformation_get"]);
-
 
 // List APIs
 Route::post('/POST/addlist', [ListController::class, "addList_post"]);
@@ -65,7 +60,7 @@ Route::post('/POST/deletejbudget', [JourneyController::class, "deleteJbudget_pos
 Route::post('/POST/updatejbudget', [JourneyController::class, "updateJbudget_post"]);
 Route::post('/POST/selectjbudget', [JourneyController::class, "selectJbudget_post"]);
 
-// Budget APIs
+// JourneyProjectBudget APIs
 Route::post('/POST/addjpbudget', [JourneyProjectController::class, "addJpbudget_post"]);
 Route::post('/POST/deletejpbudget', [JourneyProjectController::class, "deleteJpbudget_post"]);
 Route::post('/POST/updatejpbudget', [JourneyProjectController::class, "updateJpbudget_post"]);
@@ -85,24 +80,26 @@ Route::post('/POST/searchprojectname', [SearchController::class, "selectProjectN
 // Showlist APIs
 Route::post("/POST/userrelatedids", [UserApis::class, "userRelatedIds"]);
 
-// User APIs
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+// User authorisation APIs
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+
+// User updating APIs
 Route::post('/update-avatar', [UserController::class, 'updateAvatar'])->name('profile.update-avatar');
-Route::middleware('auth:sanctum')->put('/update', [UserController::class, 'update']);
-Route::put('/updatePassword', [UserController::class, 'updatePassword'])->middleware('auth:sanctum');
+Route::put('/update', [UserController::class, 'update']);
+Route::put('/updatePassword', [UserController::class, 'updatePassword']);
+Route::put('/update-password', [UserController::class, 'updatePassword']);
 
 //Attribution APIs
-Route::middleware('auth:sanctum')->get('/touristlist-title', [ListController::class, 'getTouristListTitles']);
-Route::middleware('auth:sanctum')->get('/user-tourlist', [ListController::class, 'getUserTourList']);
-Route::middleware('auth:sanctum')->get('/user-score', [UserController::class, 'calculateScore']);
-Route::middleware('auth:sanctum')->get("/uploaded-images", [ImagesController::class, "list_by_token"]);
+Route::get('/touristlist-title', [ListController::class, 'getTouristListTitles']);
+Route::get('/user-tourlist', [ListController::class, 'getUserTourList']);
+Route::get('/user-score', [UserController::class, 'calculateScore']);
+Route::get("/uploaded-images", [ImagesController::class, "list_by_token"]);
 Route::get("/uploaded-images/{uid}", [ImagesController::class, "list_by_uid"]);
-
 
 // Comment APIs
 Route::resource("/comment", Comments::class);
