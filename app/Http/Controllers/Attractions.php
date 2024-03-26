@@ -91,9 +91,28 @@ class Attractions extends Controller
      */
     public function destroy(string $id)
     {
-        $command = DB::table("attractions")->where("aid", [$id])->delete();
-        $code = $command ? 200 : 400;
-        return response( $this->api_formation($command, $id), $code)->header("Access-Control-Allow-Origin", "*");
+        $attraction = AttractionModel::find($id);
+        if (!$attraction) {
+            return response()->json(
+                $this->api_formation(
+                    $attraction,
+                    $id,
+                    "Attraction not found"
+                ),
+                404
+            )->header("Access-Control-Allow-Origin", "*");
+        }
+
+        $attraction->delete();
+
+        return response(
+            $this->api_formation(
+                $attraction,
+                $id,
+                "Attraction deleted successfully"
+            ),
+            200
+        )->header("Access-Control-Allow-Origin", "*");
     }
 
     public function show_by_name(string $aname)
