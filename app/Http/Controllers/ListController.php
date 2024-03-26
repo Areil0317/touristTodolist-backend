@@ -76,7 +76,9 @@ class ListController extends Controller
         }
         $model->delete();
 
-        return response()->json(['message' => 'Data deleted successfully'], 204);
+        return response([
+            'message' => 'Data deleted successfully'
+        ], 200);
     }
 
     public function updateList_post(Request $request)
@@ -131,12 +133,9 @@ class ListController extends Controller
     {
         $user = Auth::user();
         $touristlists = ListModel::where('uid', $user->id)->get();
-
-
         if (!$touristlists) {
             return response()->json(['message' => 'Data not found'], 404);
         }
-
         return response()->json($touristlists->toArray(), 200);
     }
 
