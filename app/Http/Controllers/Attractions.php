@@ -111,13 +111,13 @@ class Attractions extends Controller
             "message" => $message,
             "input" => $input,
             "result" => $result,
-        ], 200)->header("Access-Control-Allow-Origin", "*");;
+        ], 200)->header("Access-Control-Allow-Origin", "*");
     }
     private function error_response($message = "Error", $input, $result, $code = 400) {
         return response()->json([
             "message" => $message,
             "input" => $input,
             "result" => $result,
-        ], $code)->header("Access-Control-Allow-Origin", "*");;
+        ], $code)->header("Access-Control-Allow-Origin", "*");
     }
 }
