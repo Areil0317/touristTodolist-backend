@@ -20,7 +20,7 @@ class UserApis extends Controller
         $tlid = ListModel::where('uid', $uid)->pluck('tlid')->toArray();
         $jid = JourneyModel::whereIn('tlid', $tlid)->pluck('jid')->toArray();
         $jpid = JourneyProjectModel::whereIn('jid', $jid)->pluck('jpid')->toArray();
-        
+
         $data = [];
         if ($tlid !== null) {
             $data['tlid'] = $tlid;
@@ -31,28 +31,16 @@ class UserApis extends Controller
         if ($jpid !== null) {
             $data['jpid'] = $jpid;
         }
-    
+
         return response()->json($data);
 
     }
     public function userAllInformation_get(Request $request) {
-        
         $user = Auth::user();
-        $userWithTouristLists = User::with('touristLists.journeys.attraction', 'touristLists.journeys.journeyProjects.project')
-        ->find($user->id)->touristLists;
-        // $touristLists = $userWithTouristLists->touristLists;
-        // $result = $touristlists->map(function ($touristlist) {
-        //     return [
-        //         'tlid' => $touristlist->tlid,
-        //         'id' => $touristlist->uid,
-        //         'jid' => JourneyModel::where('tlid', $touristlist->tlid)->get()->map(function ($journey) {
-        //             return ['jid' => $journey->jid];
-        //         })
-        //     ];
-        // });
-    
-    
-
+        $userWithTouristLists = User::with(
+            'touristLists.journeys.attraction',
+            'touristLists.journeys.journeyProjects.project',
+        )->find($user->id)->touristLists;
         return response()->json($userWithTouristLists);
     }
 }
