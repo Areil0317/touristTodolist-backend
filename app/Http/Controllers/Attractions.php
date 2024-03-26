@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\AttractionModel;
 
 class Attractions extends Controller
 {
@@ -20,7 +21,7 @@ class Attractions extends Controller
      */
     public function index()
     {
-        $command = DB::table("attractions")->get();
+        $command = AttractionModel::all();
         return response([
             "result" => $command
         ]);
@@ -74,9 +75,9 @@ class Attractions extends Controller
      */
     public function show(string $id)
     {
-        $command = DB::table("attractions")->where("aid", [$id])->get();
-        $code = $command ? 200 : 400;
-        return response( $this->api_formation($command, $id), $code)->header("Access-Control-Allow-Origin", "*");
+        $item = AttractionModel::find($id);
+        $code = $item ? 200 : 400;
+        return response( $this->api_formation($item, $id), $code)->header("Access-Control-Allow-Origin", "*");
     }
 
     /**
