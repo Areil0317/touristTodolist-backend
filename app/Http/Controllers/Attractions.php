@@ -112,9 +112,9 @@ class Attractions extends Controller
 
     public function show_by_name(string $aname)
     {
-        $command = DB::table("attractions")->where("aname", [$aname])->get();
-        $code = count($command) > 0 ? 200 : 404;
-        $message = count($command) > 0 ? "Success" : "No data";
+        $command = AttractionModel::where("aname", $aname)->first();
+        $code = $command ? 200 : 404;
+        $message = $command ? "Success" : "No data";
         $api = $this->api_formation(
             $command,
             $aname,
