@@ -113,6 +113,12 @@ class Attractions extends Controller
     {
         $command = DB::table("attractions")->where("aname", [$aname])->get();
         $code = count($command) > 0 ? 200 : 404;
-        return response( $this->api_formation($command, $aname), $code)->header("Access-Control-Allow-Origin", "*");
+        $message = count($command) > 0 ? "Success" : "No data";
+        $api = $this->api_formation(
+            $command,
+            $aname,
+            $message
+        );
+        return response( $api, $code, )->header("Access-Control-Allow-Origin", "*");
     }
 }
