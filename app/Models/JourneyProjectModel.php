@@ -15,4 +15,14 @@ class JourneyProjectModel extends Model
     {
         return $this->belongsTo(ProjectModel::class,'pid');
     }
+
+    public function jpbudgets()
+    {
+        return $this->hasMany(JpbudgetModel::class,'jpid');
+    }
+
+    public function jimages()
+    {
+        return $this->hasMany(JpimageModel::class,'jpid');
+    }
 }
