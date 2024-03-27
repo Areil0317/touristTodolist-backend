@@ -12,16 +12,21 @@ class JourneyProjectModel extends Model
     public $timestamps = false;
     public function project()
     {
-        return $this->belongsTo(ProjectModel::class,'pid');
+        return $this->belongsTo(ProjectModel::class, 'pid');
     }
 
     public function jpbudgets()
     {
-        return $this->hasMany(JpbudgetModel::class,'jpid');
+        return $this->hasMany(JpbudgetModel::class, 'jpid');
     }
 
     public function jimages()
     {
-        return $this->hasMany(JpimageModel::class,'jpid');
+        return $this->hasMany(JpimageModel::class, 'jpid');
+    }
+
+    public function journey()
+    {
+        return $this->belongsTo(JourneyModel::class, 'jid');
     }
 }
