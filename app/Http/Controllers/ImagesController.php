@@ -85,7 +85,6 @@ class ImagesController extends Controller
             return response()->json(['message' => 'Journey ID is required.'], 422);
         }
 
-        // 验证当前用户是否有权限向该Journey添加图片
         $journey = JourneyModel::where('jid', $journeyId)
             ->whereHas('touristList', function ($query) use ($request) {
                 $query->whereHas('user', function ($subQuery) use ($request) {
@@ -97,23 +96,34 @@ class ImagesController extends Controller
             return response()->json(['message' => 'Unauthorized or Journey not found.'], 403);
         }
 
-        // 验证请求中的文件
         $request->validate([
-            'jimg' => 'required|image|max:2048',
+            'jimg.*' => 'required|image|max:2048', // 修改了这里来验证多文件上传
         ]);
 
-        // 存储图片
-        $path = $request->file('jimg')->store('images', 'public');
+        $paths = []; // 存储所有图片路径的数组
 
-        // 创建并保存图片信息到jimage表
-        $jimage = new JimageModel([
-            'jid' => $journeyId,
-            'jimg' => $path,
-        ]);
-        $jimage->save();
+        if ($request->hasFile('jimg')) {
+            foreach ($request->file('jimg') as $file) { // 处理每个文件
+                $path = $file->store('images', 'public');
+                if ($path) {
+                    $paths[] = $path; // 存储成功上传的文件路径
 
-        return response()->json(['message' => 'Image uploaded successfully.', 'path' => $path], 201);
+                    JimageModel::create([ // 使用 create 方法，确保模型中的 $fillable 属性已设置
+                        'jid' => $journeyId,
+                        'jimg' => $path,
+                    ]);
+                } else {
+                    // 可以选择在这里处理文件存储失败的情况
+                    return response()->json(['message' => 'Failed to store some images.'], 500);
+                }
+            }
+        } else {
+            return response()->json(['message' => 'No image provided.'], 422);
+        }
+
+        return response()->json(['message' => 'Images uploaded successfully.', 'paths' => $paths], 201);
     }
+
 
     public function add_jpimage(Request $request)
     {
@@ -123,34 +133,43 @@ class ImagesController extends Controller
             return response()->json(['message' => 'JourneyProject ID is required.'], 422);
         }
 
-        // 验证当前用户是否有权限向该JourneyProject添加图片
         $journeyProject = JourneyProjectModel::where('jpid', $jprojectId)
-            ->whereHas('journey', function ($query) use ($request) {
-                $query->whereHas('touristList', function ($subQuery) use ($request) {
-                    $subQuery->where('uid', $request->user()->id);
-                });
+            ->whereHas('journey.touristList', function ($query) use ($request) {
+                $query->where('uid', $request->user()->id);
             })->first();
 
         if (!$journeyProject) {
             return response()->json(['message' => 'Unauthorized or JourneyProject not found.'], 403);
         }
 
-        // 验证请求中的文件
         $request->validate([
-            'jpimg' => 'required|image|max:2048',
+            'jpimg.*' => 'required|image|max:2048',
         ]);
 
-        // 存储图片
-        $path = $request->file('jpimg')->store('images', 'public');
+        $paths = [];
 
-        // 创建并保存图片信息到jpimage表
-        $jpImage = new JpimageModel([
-            'jpid' => $jprojectId,
-            'jpimg' => $path,
-        ]);
-        $jpImage->save();
+        if ($request->hasFile('jpimg')) {
+            foreach ($request->file('jpimg') as $file) {
+                $path = $file->store('images', 'public');
+                if ($path) {
+                    $paths[] = $path; // 收集成功存储的文件路径
+                    JpimageModel::create([
+                        'jpid' => $jprojectId,
+                        'jpimg' => $path,
+                    ]);
+                } else {
+                    return response()->json("Failed to store the file.");
+                }
+            }
 
-        return response()->json(['message' => 'Image uploaded successfully.', 'path' => $path], 201);
+            if (count($paths) > 0) {
+                return response()->json(['message' => 'Images uploaded successfully.', 'paths' => $paths], 201);
+            } else {
+                return response()->json(['message' => 'Failed to upload images.'], 500);
+            }
+        } else {
+            return response()->json(['message' => 'No image provided.'], 422);
+        }
     }
 
 
