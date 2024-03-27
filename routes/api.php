@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\PreController;
 
 /*
 |--------------------------------------------------------------------------
@@ -115,5 +116,10 @@ Route::get("/attraction-name/{aname}", [Attractions::class, "show_by_name"]);
 Route::resource("/project", Projects::class);
 Route::get("/project/{pid}/comments", [CommentsBySpecialCall::class, "show_by_pid"]);
 Route::get("/project-name/{aname}", [Projects::class, "show_by_attraction"]);
+// Prelist APIs
+Route::get('/pres', [PreController::class, 'index']);
+Route::post('/pres', [PreController::class, 'store']);
+Route::put('/pres/{pre}', [PreController::class, 'update']);
+Route::delete('/pres/{pre}', [PreController::class, 'destroy']);
 
 // Other APIs
