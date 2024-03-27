@@ -10,4 +10,11 @@ class JimageModel extends Model
     protected $table = 'jimage';
     protected $primaryKey = 'jiid';
     public $timestamps = false;
+
+    protected $fillable = ['jid', 'jimg'];
+
+    public function journey()
+    {
+        return $this->belongsTo(JourneyModel::class, 'jid');
+    }
 }

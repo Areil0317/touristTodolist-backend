@@ -50,9 +50,20 @@ class ListController extends Controller
         }
 
         $model->save();
+
+        
+        // $journey = new JourneyModel;
+        // $journey->tlid = $model->tlid;
+        // $aname = "輸入您的第一個行程";
+        // $attraction = AttractionModel::firstOrCreate(['aname' => $aname]);
+
+        // $journey->aid = $attraction->aid;
+// $journey->save();
+
         return response()->json([
             "message" => "Data created successfully",
             "result" => $model,
+            // "result2" => $journey,
         ], 201);
     }
 
