@@ -10,9 +10,14 @@ class ListModel extends Model
     protected $table = 'touristlist';
     protected $primaryKey = 'tlid';
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'uid');
+    }
+
     public function journeys()
     {
-        return $this->hasMany(JourneyModel::class,'tlid');
+        return $this->hasMany(JourneyModel::class, 'tlid');
     }
 
 

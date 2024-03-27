@@ -47,6 +47,8 @@ Route::post('/POST/selectjourney', [JourneyController::class, "selectJourney_pos
 Route::post('/POST/addjimage', [JourneyController::class, "addJimage_post"]);
 Route::post('/POST/deletejimage', [JourneyController::class, "deleteJimage_post"]);
 Route::post('/POST/selectjimage', [JourneyController::class, "selectJimage_post"]);
+Route::middleware('auth:sanctum')->post('/images/upload', [ImagesController::class, "add_jimage"]);
+Route::middleware('auth:sanctum')->post('/jpimages/upload', [ImagesController::class, "add_jpimage"]);
 
 // JourneyProject APIs
 Route::post('/POST/addjourneyproject', [JourneyProjectController::class, "addJourneyProject_post"]);
@@ -70,6 +72,7 @@ Route::post('/POST/selectjpbudget', [JourneyProjectController::class, "selectJpb
 Route::post('/POST/addjpimage', [JourneyProjectController::class, "addJpimage_post"]);
 Route::post('/POST/deletejpimage', [JourneyProjectController::class, "deleteJpimage_post"]);
 Route::post('/POST/selectjpimage', [JourneyProjectController::class, "selectJpimage_post"]);
+
 
 // Search APIs
 Route::post('/POST/searchsimilarattraction', [SearchController::class, "selectSimilarAttraction_post"]);
