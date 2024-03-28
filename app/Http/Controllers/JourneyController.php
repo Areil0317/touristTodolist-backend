@@ -27,7 +27,7 @@ class JourneyController extends Controller
         }
 
         if($request->aname == null){
-            $aname = "請輸入行程名稱";
+            $aname = "";
         }else{
             $aname = $request->aname;
         }
