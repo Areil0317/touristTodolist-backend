@@ -136,8 +136,17 @@ class ListController extends Controller
             $model->end_date = $model->start_date;
         }
 
+        $model->totalamount = $request->totalamount;
+
+        // $request->validate([
+        //     'tlphoto' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        // ]);
+
+        // $path = $request->file('tlphoto')->store('images', 'public');
+        // $model->tlphoto = $path;
+
         $model->save();
-        return response()->json(['message' => 'Data updated successfully'], 200);
+        return response()->json(['message' => 'Data updated successfully',"result" => $model], 200);
     }
 
     public function selectList_post(Request $request)

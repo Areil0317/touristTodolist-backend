@@ -50,6 +50,7 @@ Route::post('/POST/deletejimage', [JourneyController::class, "deleteJimage_post"
 Route::post('/POST/selectjimage', [JourneyController::class, "selectJimage_post"]);
 Route::middleware('auth:sanctum')->post('/images/upload', [ImagesController::class, "add_jimage"]);
 Route::middleware('auth:sanctum')->post('/jpimages/upload', [ImagesController::class, "add_jpimage"]);
+Route::middleware('auth:sanctum')->post('/listimage/upload', [ImagesController::class, "update_list_image"]);
 
 // JourneyProject APIs
 Route::post('/POST/addjourneyproject', [JourneyProjectController::class, "addJourneyProject_post"]);
