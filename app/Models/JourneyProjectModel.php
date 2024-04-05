@@ -20,7 +20,7 @@ class JourneyProjectModel extends Model
         return $this->hasMany(JpbudgetModel::class, 'jpid');
     }
 
-    public function jimages()
+    public function jpimages()
     {
         return $this->hasMany(JpimageModel::class, 'jpid');
     }
