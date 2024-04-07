@@ -63,8 +63,11 @@ class JourneyController extends Controller
             }
             
         }
-
+        if( $request->arrived_time != null ){
         $model->arrived_time = $request->arrived_time;
+        }else{
+        $model->arrived_time = "00:00:00";
+        }
         $model->leaved_time = $request->leaved_time;
 
         $arrivedDate = strtotime($model->arrived_date);
@@ -156,6 +159,13 @@ class JourneyController extends Controller
 
         $model->arrived_time = $request->arrived_time;
         $model->leaved_time = $request->leaved_time;
+
+        if( $request->arrived_time != null ){
+            $model->arrived_time = $request->arrived_time;
+            }else{
+            $model->arrived_time = "00:00:00";
+            }
+            $model->leaved_time = $request->leaved_time;
 
         $arrivedDate = strtotime($model->arrived_date);
         $leavedDate = strtotime($model->leaved_date);
