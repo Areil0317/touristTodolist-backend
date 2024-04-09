@@ -122,7 +122,7 @@ Route::get("/project-name/{aname}", [Projects::class, "show_by_attraction"]);
 // Prelist APIs
 Route::get('/pres', [PreController::class, 'index']);
 Route::post('/pres', [PreController::class, 'store']);
-Route::put('/pres/{pre}', [PreController::class, 'update']);
-Route::delete('/pres/{pre}', [PreController::class, 'destroy']);
+Route::put('/pres/{preid}', [PreController::class, 'update']);
+Route::delete('/pres/{preid}', [PreController::class, 'destroy']);
 
 // Other APIs
