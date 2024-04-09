@@ -31,6 +31,8 @@ Route::get('/test', function () {
 
 // User All list APIs userAllInformation_get
 Route::middleware('auth:sanctum')->get('/user_all_informations', [UserApis::class, "userAllInformation_get"]);
+//User budget APIs
+// Route::get('/GET/searchallbudget', [UserApis::class, "searchAllBudget_get"]);
 
 // List APIs
 Route::post('/POST/addlist', [ListController::class, "addList_post"]);
@@ -50,6 +52,7 @@ Route::post('/POST/deletejimage', [JourneyController::class, "deleteJimage_post"
 Route::post('/POST/selectjimage', [JourneyController::class, "selectJimage_post"]);
 Route::middleware('auth:sanctum')->post('/images/upload', [ImagesController::class, "add_jimage"]);
 Route::middleware('auth:sanctum')->post('/jpimages/upload', [ImagesController::class, "add_jpimage"]);
+Route::middleware('auth:sanctum')->post('/listimage/upload', [ImagesController::class, "update_list_image"]);
 
 // JourneyProject APIs
 Route::post('/POST/addjourneyproject', [JourneyProjectController::class, "addJourneyProject_post"]);
@@ -83,6 +86,21 @@ Route::post('/POST/searchprojectname', [SearchController::class, "selectProjectN
 
 // Showlist APIs
 Route::post("/POST/userrelatedids", [UserApis::class, "userRelatedIds"]);
+
+// budgetmanage APIs
+Route::post('/POST/addbudgetmanage', [BudgetManageController::class, "addBudgetManage_post"]);
+Route::post('/POST/deletebudgetmanage', [BudgetManageController::class, "deleteBudgetManage_post"]);
+Route::post('/POST/updatebudgetmanage', [BudgetManageController::class, "updateBudgetManage_post"]);
+
+
+// PartnerController
+Route::post('/POST/addpartner', [PartnerController::class, "addPartner_post"]);
+Route::post('/POST/deletepartner', [PartnerController::class, "deletePartner_post"]);
+Route::post('/POST/updatepartner', [PartnerController::class, "updatePartner_post"]);
+
+
+
+
 
 // User authorisation APIs
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

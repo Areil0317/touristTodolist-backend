@@ -75,6 +75,44 @@ class ImagesController extends Controller
         return response($this->list_by_uid($user->id));
     }
 
+    public function update_list_image(Request $request)
+    {
+
+        $user = Auth::user();
+        $tlid = $request->tlid;
+        $model = ListModel::find($tlid);
+
+        if( !isset($user) ) {
+            return response([
+                "message" => "No such user",
+                "user" => $user
+            ], 401);
+        }
+        if (!$model) {
+            return response([
+                'message' => 'Data not found'
+            ], 404);
+        }
+        if( $model->uid != $user->id ) {
+            return response([
+                "message" => "Unauthorised user",
+                "user" => $user->id
+            ], 401);
+        }
+
+
+        $request->validate([
+            'tlphoto' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $path = $request->file('tlphoto')->store('images', 'public');
+        $model->tlphoto = $path;
+
+
+        $model->save();
+        return response()->json(['message' => 'Data updated successfully',"result" => $model], 200);
+    }
+
 
 
     public function add_jimage(Request $request)

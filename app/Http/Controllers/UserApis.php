@@ -37,7 +37,7 @@ class UserApis extends Controller
     }
     public function userAllInformation_get(Request $request) {
         $user = Auth::user();
-        $userWithTouristLists = User::with('touristLists.journeys.attraction', 'touristLists.journeys.jbudgets','touristLists.journeys.jimages' ,'touristLists.journeys.journeyProjects.project','touristLists.journeys.journeyProjects.jpbudgets','touristLists.journeys.journeyProjects.jimages')
+        $userWithTouristLists = User::with('touristLists.budgetmanages.partners','touristLists.journeys.attraction', 'touristLists.journeys.jbudgets','touristLists.journeys.jimages' ,'touristLists.journeys.journeyProjects.project','touristLists.journeys.journeyProjects.jpbudgets','touristLists.journeys.journeyProjects.jpimages')
         ->find($user->id)->touristLists;
         // $touristLists = $userWithTouristLists->touristLists;
         // $result = $touristlists->map(function ($touristlist) {
@@ -54,4 +54,7 @@ class UserApis extends Controller
 
         return response()->json($userWithTouristLists);
     }
+
+
+
 }

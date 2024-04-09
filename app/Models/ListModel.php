@@ -20,6 +20,10 @@ class ListModel extends Model
         return $this->hasMany(JourneyModel::class, 'tlid');
     }
 
+    public function budgetmanages()
+    {
+        return $this->hasMany(BudgetManageModel::class, 'tlid');
+    }
 
     public static function listTimeStamp()
     {

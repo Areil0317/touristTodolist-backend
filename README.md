@@ -6,7 +6,7 @@
 
 1. 將 .env.example 複製為 .env
 2. composer install
-3. php artisan migrate
+3. php artisan migrate 
 4. 視啟動的路徑與方法不同，可能需要對應修改[前端專案](https://github.com/SVAkkao/frontend---todolist)的 REACT_APP_API_HOST= 數值。
 
 ### 關於 4，如何與 REACT_APP_API_HOST= 對應
