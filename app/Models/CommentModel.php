@@ -50,7 +50,7 @@ class CommentModel extends Model
         return [
             // ID info
             'cid' => $comment->cid,
-            // 'uid' => $comment->uid,
+            'uid' => $comment->uid,
             // 'pid' => $project->pid,
             // Data info
             'projectname' => $project->pname,
@@ -77,7 +77,7 @@ class CommentModel extends Model
         return [
             // ID info
             'cid' => $comment->cid,
-            // 'uid' => $comment->uid,
+            'uid' => $comment->uid,
             // 'pid' => $comment->pid,
             // Data info
             'projectname' => $project->pname,
