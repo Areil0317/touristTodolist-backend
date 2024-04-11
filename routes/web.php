@@ -23,3 +23,4 @@ Route::get("/", [WebRoutes::class, "index"]);
 // http://127.0.0.1:8000/storage/avatars/BolaBzjE3xZatSvVd1swgmv4Dc8n6rgFwfGaPYVr.svg
 Route::get("/storage/avatars/{filename}", [WebRoutes::class, "avatars"])->where("filename", ".*");
 Route::get("/avatars/{filename}", [WebRoutes::class, "avatars"])->where("filename", ".*");
+Route::get("/images/{filename}", [WebRoutes::class, "images"])->where("filename", ".*");

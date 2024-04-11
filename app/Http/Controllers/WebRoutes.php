@@ -17,4 +17,11 @@ class WebRoutes extends Controller
         }
         return response()->file($path);
     }
+    public function images($filename) {
+        $path = storage_path("app/public/images/$filename");
+        if (!Storage::exists("public/images/$filename")) {
+            abort(404);
+        }
+        return response()->file($path);
+    }
 }
