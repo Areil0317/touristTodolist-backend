@@ -34,7 +34,6 @@ class ImagesController extends Controller
     private function get_journey_project_list($jids)
     {
         return $this->get_all_datas_from_db_by_list("journeyproject", "jpid", "jid", $jids);
-        ;
     }
     /**
      * If you don't know how it works, think like this:
@@ -61,12 +60,13 @@ class ImagesController extends Controller
         $jplist = $this->get_journey_project_list($jlist);
 
         // List all images
+        $todolist_images = $this->get_all_datas_from_db_by_list("touristlist", "tlphoto", "tlid", $list);
         $list_images = $this->get_all_datas_from_db_by_list("jimage", "jimg", "jid", $jlist);
         $project_list_images = $this->get_all_datas_from_db_by_list("jpimage", "jpimg", "jpid", $jplist);
         $result = array_merge($list_images, $project_list_images);
         return [
             "message" => count($result) > 0 ? "success" : "no images",
-            "result" => array_merge($list_images, $project_list_images),
+            "result" => array_merge($todolist_images, $list_images, $project_list_images),
         ];
     }
     public function list_by_token()
