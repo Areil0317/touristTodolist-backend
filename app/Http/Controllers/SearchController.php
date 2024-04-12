@@ -12,6 +12,9 @@ class SearchController extends Controller
     public function selectSimilarAttraction_post(Request $request)
     {
         $aname = $request->aname;
+        if (!$aname) {
+            return response()->json(['message' => 'Data not found'], 404);
+        }
         $model = AttractionModel::where('aname', 'like', '%' . $aname . '%')->get();
         if (!$model) {
             return response()->json(['message' => 'Data not found'], 404);
