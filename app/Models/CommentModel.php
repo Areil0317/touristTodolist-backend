@@ -107,7 +107,7 @@ class CommentModel extends Model
 
     public function find_by_project($pid) {
         try {
-            $comments = $this->where("pid", $pid)->get();
+            $comments = $this->where("pid", $pid)->orderBy("created_at", "ASC")->get();
             return $comments->map(function ($comment) {
                 $user = User::find($comment["uid"]);
                 return $this->format_api_response($comment, $user);
