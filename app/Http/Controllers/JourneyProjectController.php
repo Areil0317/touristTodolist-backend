@@ -148,7 +148,7 @@ class JourneyProjectController extends Controller
         $jpStartTime = strtotime($model->jpstart_time);
         $jpEndTime = strtotime($model->jpend_time);
         if($model->jpstart_time == null){
-            $model->jpstart_time = "00:00:00";
+            $model->jpstart_time = $journey->arrived_time;
         }
 
 
@@ -332,7 +332,7 @@ class JourneyProjectController extends Controller
         $jpEndTime = strtotime($model->jpend_time);
 
         if($model->jpstart_time == null){
-            $model->jpstart_time = "00:00:00";
+            $model->jpstart_time = $journey->arrived_time;
         }
 
         if ($jpEndDate <= $jpStartDate) {
