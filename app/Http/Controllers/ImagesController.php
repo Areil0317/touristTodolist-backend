@@ -63,10 +63,10 @@ class ImagesController extends Controller
         $todolist_images = $this->get_all_datas_from_db_by_list("touristlist", "tlphoto", "tlid", $list);
         $list_images = $this->get_all_datas_from_db_by_list("jimage", "jimg", "jid", $jlist);
         $project_list_images = $this->get_all_datas_from_db_by_list("jpimage", "jpimg", "jpid", $jplist);
-        $result = array_merge($list_images, $project_list_images);
+        $result = array_filter(array_merge($todolist_images, $list_images, $project_list_images));
         return [
             "message" => count($result) > 0 ? "success" : "no images",
-            "result" => array_merge($todolist_images, $list_images, $project_list_images),
+            "result" => array_values($result),
         ];
     }
     public function list_by_token()
@@ -82,7 +82,7 @@ class ImagesController extends Controller
         $tlid = $request->tlid;
         $model = ListModel::find($tlid);
 
-        if( !isset($user) ) {
+        if (!isset($user)) {
             return response([
                 "message" => "No such user",
                 "user" => $user
@@ -93,7 +93,7 @@ class ImagesController extends Controller
                 'message' => 'Data not found'
             ], 404);
         }
-        if( $model->uid != $user->id ) {
+        if ($model->uid != $user->id) {
             return response([
                 "message" => "Unauthorised user",
                 "user" => $user->id
@@ -110,7 +110,7 @@ class ImagesController extends Controller
 
 
         $model->save();
-        return response()->json(['message' => 'Data updated successfully',"result" => $model], 200);
+        return response()->json(['message' => 'Data updated successfully', "result" => $model], 200);
     }
 
 
