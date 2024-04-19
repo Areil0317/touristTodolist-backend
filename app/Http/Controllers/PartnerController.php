@@ -27,7 +27,7 @@ class PartnerController extends Controller
         $model->pnamount = $request->pnamount;
         
         if(!isset($request->pnchecked)){
-            $model->pnchecked = "0";
+            $model->pnchecked = "1";
         }else{
             $model->pnchecked = $request->pnchecked;
         }
