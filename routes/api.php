@@ -109,6 +109,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail']);
+
 
 // User updating APIs
 Route::post('/update-avatar', [UserController::class, 'updateAvatar'])->name('profile.update-avatar');
