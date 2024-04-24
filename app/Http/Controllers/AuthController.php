@@ -11,7 +11,7 @@ use App\Mail\ResetPasswordMail;
 
 class AuthController extends Controller
 {
-    // 注册用户
+    
     public function register(Request $request)
     {
         $validated = $request->validate([
@@ -36,7 +36,7 @@ class AuthController extends Controller
             ->header('Access-Control-Allow-Origin', '*');
     }
 
-    // 用户登录
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -60,7 +60,7 @@ class AuthController extends Controller
         ;
     }
 
-    //用戶登出
+   
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
@@ -84,7 +84,7 @@ class AuthController extends Controller
 
 
         try {
-            //code...
+            
             Mail::to($user->email)->send(new ResetPasswordMail($newPassword));
             return response()->json(['message' => '新密碼已經發送到您的郵箱。']);
         } catch (\Throwable $th) {
