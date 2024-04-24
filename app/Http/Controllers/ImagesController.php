@@ -135,23 +135,22 @@ class ImagesController extends Controller
         }
 
         $request->validate([
-            'jimg.*' => 'required|image|max:2048', // 修改了这里来验证多文件上传
+            'jimg.*' => 'required|image|max:2048', 
         ]);
 
-        $paths = []; // 存储所有图片路径的数组
+        $paths = []; 
 
         if ($request->hasFile('jimg')) {
-            foreach ($request->file('jimg') as $file) { // 处理每个文件
+            foreach ($request->file('jimg') as $file) { 
                 $path = $file->store('images', 'public');
                 if ($path) {
-                    $paths[] = $path; // 存储成功上传的文件路径
+                    $paths[] = $path; 
 
-                    JimageModel::create([ // 使用 create 方法，确保模型中的 $fillable 属性已设置
+                    JimageModel::create([ 
                         'jid' => $journeyId,
                         'jimg' => $path,
                     ]);
                 } else {
-                    // 可以选择在这里处理文件存储失败的情况
                     return response()->json(['message' => 'Failed to store some images.'], 500);
                 }
             }
@@ -165,7 +164,7 @@ class ImagesController extends Controller
 
     public function add_jpimage(Request $request)
     {
-        $jprojectId = $request->input('jpid'); // 从请求中获取 journeyproject 的 ID
+        $jprojectId = $request->input('jpid'); 
 
         if (!$jprojectId) {
             return response()->json(['message' => 'JourneyProject ID is required.'], 422);
@@ -190,7 +189,7 @@ class ImagesController extends Controller
             foreach ($request->file('jpimg') as $file) {
                 $path = $file->store('images', 'public');
                 if ($path) {
-                    $paths[] = $path; // 收集成功存储的文件路径
+                    $paths[] = $path; 
                     JpimageModel::create([
                         'jpid' => $jprojectId,
                         'jpimg' => $path,
